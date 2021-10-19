@@ -17,6 +17,35 @@ export function validarCategoria(form) {
 	return { estado, mensaje, datos };
 }
 
+
+/*
+Form Palabra
+*/
+export function validarPalabra(form) {
+	let id = form.elements["id"].value;
+	let name = form.elements["name"].value;
+	let descripcion = form.elements["descripcion"].value;
+	let categoria = form.elements["categoria"].value;
+	const datos = {
+		id,
+		name,
+		descripcion,
+		categoria
+	};
+
+	let mensaje = "";	
+	if (name ==="")
+		mensaje = "<p>Ingrese un nombre para la palabra</p>";
+		
+	if (categoria ==="")
+		mensaje += "<p>Seleccione una categoria</p>";
+	
+	let estado = mensaje === "";
+	return { estado, mensaje, datos };
+}
+
+
+
 /* Form Jugador */
 
 export function validarJugador(form) {

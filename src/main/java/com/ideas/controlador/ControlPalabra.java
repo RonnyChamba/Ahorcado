@@ -13,19 +13,24 @@ import org.json.simple.JSONObject;
 
 import com.ideas.commons.ExceptionData;
 import com.ideas.dao.DAOCategoria;
+import com.ideas.dao.DAOPalabra;
 import com.ideas.entidades.Categoria;
+import com.ideas.entidades.Palabra;
 import com.ideas.utilidades.UtilidadesCategoria;
+import com.ideas.utilidades.UtilidadesPalabra;
 
 @WebServlet(description = "Manejador de Palabras", urlPatterns = { "/CPalabra" })
 public class ControlPalabra extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private DAOCategoria daoCategoria;
+	private DAOPalabra daoPalabra;
 
 	public ControlPalabra() {
 
 		super();
 		daoCategoria = new DAOCategoria();
+		daoPalabra = new DAOPalabra();
 
 	}
 
@@ -49,7 +54,7 @@ public class ControlPalabra extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// System.out.println("Action:" + request.getParameter("action"));
+		// System.out.println("Action Servelet:" + request.getParameter("action"));
 		String action = request.getParameter("action").toLowerCase();
 		switch (action) {
 			
@@ -58,29 +63,28 @@ public class ControlPalabra extends HttpServlet {
 
 			break;
 
-		case "insertcategoria":
-			insertCategoria(request, response);
+		case "insertpalabra":
+			insertPalabra(request, response);
 
 			break;
-		case "formupdatecategoria":
-			formUpdateCategoria(request, response);
+		case "formupdatepalabra":
+			formUpdatePalabra(request, response);
 
 			break;
-		case "actionupdatecategoria":
-			actionUpdateCategoria(request, response);
+		case "actionupdatepalabra":
+			actionUpdatePalabra(request, response);
 
 			break;
-		case "actiondeletecategoria":
-			actionDeleteCategoria(request, response);
+		case "actiondeletepalabra":
+			actionDeletePalabra(request, response);
 
 			break;
-		case "actionbuscarcategoria":
-			actionBuscarCategoria(request, response);
+		case "actionbuscarpalabra":
+			actionBuscarPalabra(request, response);
 
 			break;
-		case "ultimacategoria":
-
-			ultimaCategoriaInsertada(request, response);
+		case "ultimapalabra":
+			ultimaPalabraInsertada(request, response);
 
 			break;
 
@@ -98,8 +102,11 @@ public class ControlPalabra extends HttpServlet {
 	}
 	protected void formPalabra(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		try {
+			
+			List<Palabra> palabras = daoPalabra.listar("");
+			request.setAttribute("palabras", palabras);
+			
 			List<Categoria> categorias = daoCategoria.listar("");
 			request.setAttribute("categorias", categorias);
 
@@ -112,7 +119,7 @@ public class ControlPalabra extends HttpServlet {
 
 	}
 
-	protected void insertCategoria(HttpServletRequest request, HttpServletResponse response)
+	protected void insertPalabra(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String mensaje = "";
@@ -121,54 +128,65 @@ public class ControlPalabra extends HttpServlet {
 
 			String nombre = request.getParameter("name");
 			String descripcion = request.getParameter("descripcion");
+			String categoria = request.getParameter("categoria");
+			
+			Palabra palabra = new Palabra();
+			palabra.setNombre(nombre);
+			palabra.setDescripcion(descripcion);
+			palabra.getCategoria().setIdCategoria(categoria);
 
-			Categoria categoria = new Categoria();
-			categoria.setNombre(nombre);
-			categoria.setDescripcion(descripcion);
-
-			boolean retorno = daoCategoria.insert(categoria);
-			mensaje = retorno ? "Categoria registrada correctamente" : "Surguio un problema al registrar la categoria";
-
+			boolean retorno = daoPalabra.insert(palabra);
+			mensaje = retorno ? "Palabra registrada correctamente" : "No se inserto ninguna palabra";
 			json.put("estado", retorno);
 			json.put("sms", mensaje);
-		} catch (Exception e) {
-
-			mensaje = "Surgio un error inesperado, intentelo mas tarde";
+		} catch (ExceptionData e) {
+			
 			json.put("estado", false);
-			json.put("sms", mensaje);
+			json.put("sms", e.getMessage());
+		}
+		catch (Exception e) {
+			
+			json.put("estado", false);
+			json.put("sms", "Ocurrio un error inesperado, intentelo mas tarde");
 		}
 
 		response.getWriter().print(json.toString());
 
 	}
 
-	protected void formUpdateCategoria(HttpServletRequest request, HttpServletResponse response)
+	protected void formUpdatePalabra(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		JSONObject json = new JSONObject();
 		try {
 
 			String id = request.getParameter("id");
-			Categoria categoria = daoCategoria.buscar(id);
-			boolean estado = categoria != null;
+			Palabra palabra = daoPalabra.buscar(id);
+			boolean estado = palabra != null;
 			if (estado)
-				json.put("categoria", UtilidadesCategoria.jsonString(categoria));
+				json.put("palabra", UtilidadesPalabra.jsonString(palabra));
 			else
-				json.put("sms", "Categoria  con codigo " + id + " no registrada");
+				json.put("sms", "Palabra  con codigo " + id + " no registrada");
 			json.put("estado", estado);
+
+			// System.out.println("JSON Update "+ json.toJSONString());
 
 		} catch (ExceptionData e) {
 			System.out.println(" ene el error " + e.getMessage());
 			json.put("estado", false);
 			json.put("sms", e.getMessage());
 
-		}
+		} catch (Exception e) {
+			System.out.println("Errro execption " + e.getMessage());
+			json.put("estado", false);
+			json.put("sms","Ocurrio un error inesperado, intentelo mas tarde");
 
+		}
 		response.getWriter().print(json.toJSONString());
 
 	}
 
-	protected void actionUpdateCategoria(HttpServletRequest request, HttpServletResponse response)
+	protected void actionUpdatePalabra(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		JSONObject json = new JSONObject();
@@ -176,18 +194,25 @@ public class ControlPalabra extends HttpServlet {
 			String id = request.getParameter("id");
 			String nombre = request.getParameter("name");
 			String descripcion = request.getParameter("descripcion");
+			String categoria = request.getParameter("categoria");
 
-			Categoria categoria = new Categoria();
-			categoria.setIdCategoria(id);
-			categoria.setNombre(nombre);
-			categoria.setDescripcion(descripcion);
+			Palabra palabra = new Palabra();
+			palabra.setIdPalabra(id);
+			palabra.setNombre(nombre);
+			palabra.setDescripcion(descripcion);
+			palabra.getCategoria().setIdCategoria(categoria);
 
-			boolean estado = daoCategoria.update(categoria);
+			boolean estado = daoPalabra.update(palabra);
 			json.put("estado", estado);
-			json.put("sms", estado ? "Categoria Actualizada correctamente"
-					: "Surguio un error inesperado, intentelo mas tarde");
+			json.put("sms", estado ? "Palabra Actualizada correctamente"
+					: "No se actualizo ningun registro");
 
-		} catch (Exception e) {
+		} catch (ExceptionData e) {
+			// TODO: handle exception
+			json.put("estado", false);
+			json.put("sms", e.getMessage());
+		
+		}catch (Exception e) {
 			// TODO: handle exception
 			json.put("estado", false);
 			json.put("sms", "Surguio un error inesperado, intentelo mas tarde");
@@ -197,21 +222,33 @@ public class ControlPalabra extends HttpServlet {
 		response.getWriter().print(json.toJSONString());
 	}
 
-	protected void actionDeleteCategoria(HttpServletRequest request, HttpServletResponse response)
+	protected void actionDeletePalabra(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		JSONObject json = new JSONObject();
-		String id = request.getParameter("id");
+		try {
+			String id = request.getParameter("id");
+			boolean estado = daoPalabra.delete(id);
+			json.put("estado", estado);
+			json.put("sms", estado ? "Palabra Eliminada correctamente":"No se elimino ningun registro");
+			
+		} catch (ExceptionData e) {
+			// TODO Auto-generated catch block
+			json.put("estado", false);
+			json.put("sms", e.getMessage());
+			
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			json.put("estado", false);
+			json.put("sms", "Ocurrio un error inesperado, intentelo mas tarde");
+			
+		}
 		
-		boolean estado =  daoCategoria.delete(id);
-		
-		json.put("estado", estado);
-		json.put("sms", estado ? "Categoria Eliminada correctamente":"Surguio un error, intentelo mas tarde");
 		
 		response.getWriter().print(json.toJSONString());
 	}
 
-	protected void actionBuscarCategoria(HttpServletRequest request, HttpServletResponse response)
+	protected void actionBuscarPalabra(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		JSONObject json = new JSONObject();
@@ -219,12 +256,12 @@ public class ControlPalabra extends HttpServlet {
 
 		try {
 
-			Categoria categoria = daoCategoria.buscar(id);
+			Palabra palabra = daoPalabra.buscar(id);
 			// System.out.println("Categoria consultada " + categoria);
-			boolean estado = categoria !=null;			
+			boolean estado = palabra !=null;			
 			json.put("estado", estado);
 			json.put("sms", estado? "Tabla Actualizada correctamente": "Categoria con id "+ id +" No existe" );
-			if (estado) json.put("categoria",  UtilidadesCategoria.jsonString(categoria));
+			if (estado) json.put("palabra",  UtilidadesPalabra.jsonString(palabra));
 
 		}
 
@@ -243,16 +280,16 @@ public class ControlPalabra extends HttpServlet {
 		response.getWriter().print(json.toJSONString());
 	}
 
-	protected void ultimaCategoriaInsertada(HttpServletRequest request, HttpServletResponse response)
+	protected void ultimaPalabraInsertada(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		JSONObject json = new JSONObject();
 		try {
 
-			Categoria categoria = daoCategoria.lastInsert();
+			Palabra palabra = daoPalabra.lastInsert();
 			json.put("estado", true);
 			json.put("sms", "Tabla Actualizada correctamente");
-			json.put("categoria", UtilidadesCategoria.jsonString(categoria));
+		    json.put("palabra", UtilidadesPalabra.jsonString(palabra));
 		}
 
 		catch (ExceptionData e) {
