@@ -16,7 +16,6 @@ public class FiltroIndex implements Filter {
         // TODO Auto-generated constructor stub
     }
 
-	
 	public void destroy() {
 	
 	}
@@ -27,20 +26,15 @@ public class FiltroIndex implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 	
-		System.out.println(this.getClass().getSimpleName());
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession sesion = req.getSession();
 		
 		if (sesion.getAttribute("usuario") !=null) {
+			
 			req.getRequestDispatcher("menu-principal.jsp").forward(req, res);
 			
-		}else chain.doFilter(request, response);
-		
-		
+		}else chain.doFilter(request, response);	
 	}
-
-
-	
 
 }

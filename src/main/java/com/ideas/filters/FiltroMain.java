@@ -19,55 +19,94 @@ import com.ideas.entidades.Jugador;
 
 public class FiltroMain implements Filter {
 
-	private FilterConfig filterConfig ;
- 
-    public FiltroMain() {
-        // TODO Auto-generated constructor stub
-    }
+	private FilterConfig filterConfig;
 
-	
-    public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
-    	this.filterConfig =fConfig;
+	public FiltroMain() {
+		// TODO Auto-generated constructor stub
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-	 
-		System.out.println(this.getClass().getSimpleName());
+	public void init(FilterConfig fConfig) throws ServletException {
+		// TODO Auto-generated method stub
+		this.filterConfig = fConfig;
+	}
+
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+		
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession sesion = req.getSession();
-		// String paraterExclusion = filterConfig.getInitParameter("fileExclusion");	
-		
-			if (sesion.getAttribute("usuario") !=null) {
-				
-				Jugador juaJugador = (Jugador) sesion.getAttribute("usuario");
-				
-				// Si no es ADMIN valido a que recurso va a acceder
-				if (!juaJugador.getTipo().equalsIgnoreCase("ADMIN")) {
-					
-					// Recursos a la que el acceso es solo para los ADMIN
-					if ("/nueva-categoria.jsp".startsWith(req.getServletPath()) 
-							|| "/nueva-palabra.jsp".startsWith(req.getServletPath())
-							|| "/nuevo-jugador.jsp".startsWith(req.getServletPath())) {
-						
-						res.sendRedirect("menu-principal.jsp");
-					
-					// Si no es Admin pero desea acceder a un recurso permitido, lo dejo pasar
-					}else chain.doFilter(req, res);
-					
-				// Si es ADMIN, Lo dejo pasar
-				}else chain.doFilter(req, res);
-			}else  res.sendRedirect("index.jsp");			
-			
-			
-	
+
+		if (sesion.getAttribute("usuario") != null)
+			sesionActive(req, res, sesion, chain);
+		else
+			res.sendRedirect("index.jsp");
+
 	}
 
+	public void sesionActive(HttpServletRequest request, HttpServletResponse response, HttpSession sesion,
+			FilterChain chain) throws IOException, ServletException {
+
+		Jugador jugador = (Jugador) sesion.getAttribute("usuario");
+		
+		// Validar tipo de usuario
+		if (!jugador.getTipo().equalsIgnoreCase("ADMIN")) 
+			sesionActiveNormal(request, response, sesion, chain);
+		
+		// ADMIN
+		 else  sesionActiveAdmin(request, response, sesion, chain);
+
+	}
+
+	public void sesionActiveAdmin(HttpServletRequest request, HttpServletResponse response, HttpSession sesion,
+			FilterChain chain) throws IOException, ServletException {
+
+		String action = "";
+		String servlet = "";
+
+		if ("/nueva-categoria.jsp".startsWith(request.getServletPath())) {
+			action = "formCategoria";
+			servlet = "CCategoria";
+		}
+		if ("/nueva-palabra.jsp".startsWith(request.getServletPath())) {
+			action = "formPalabra";
+			servlet = "CPalabra";
+		}
+
+		if ("/nuevo-jugador.jsp".startsWith(request.getServletPath())) {
+			action = "formJugador";
+			servlet = "CJugador";
+		}
+
+		if (!action.equalsIgnoreCase("") && !servlet.equalsIgnoreCase("") )
+			request.getRequestDispatcher(servlet + "?action=" + action).forward(request, response);
+		else
+			// Si los datos de la persona de piensan en actualizar aqui tabmbien tendria
+			// que dirigirme al Servlet para consultarlos de nuevo, para que esten
+			// actualizados
+			chain.doFilter(request, response);
+
+	}
+
+	
+	public void sesionActiveNormal(HttpServletRequest request, HttpServletResponse response, HttpSession sesion,
+			FilterChain chain) throws IOException, ServletException {
+
+		// Recursos  denegados, solo valido para los ADMIN
+		if ("/nueva-categoria.jsp".startsWith(request.getServletPath())
+				|| "/nueva-palabra.jsp".startsWith(request.getServletPath())
+				|| "/nuevo-jugador.jsp".startsWith(request.getServletPath())) {
+
+			response.sendRedirect("menu-principal.jsp");
+
+		// Acceder a cualquier otro recurso
+		} else chain.doFilter(request, response);
+
+	}
+
+	
 	public void destroy() {
 		// TODO Auto-generated method stub
 	}
-	
-	
 
 }

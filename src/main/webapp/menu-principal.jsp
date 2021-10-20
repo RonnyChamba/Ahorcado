@@ -34,7 +34,8 @@
 					<img src="img/Azuay.png" alt="" />
 				</div>
 
-				<c:if test="${tipoLogin !=null && tipoLogin.equalsIgnoreCase('ADMIN')}">
+				<c:if
+					test="${tipoLogin !=null && tipoLogin.equalsIgnoreCase('ADMIN')}">
 					<div class="grid__item">
 						<h3 class="grid__opcion">
 							<a href="CJugador?action=formJugador">Jugador</a>
@@ -42,20 +43,20 @@
 						<img src="img/El Oro.jpg" alt="" />
 					</div>
 
+					<div class="grid__item">
+						<h3 class="grid__opcion">
+							<a href="CCategoria?action=formCategoria">Categorias</a>
+						</h3>
+						<img src="img/guayas.jpg" alt="" />
+					</div>
+					<div class="grid__item">
+						<h3 class="grid__opcion">
+							<a href="CPalabra?action=formPalabra">Palabras</a>
+						</h3>
+						<img src="img/santoDomingo.jpg" alt="" />
+					</div>
 				</c:if>
 
-				<div class="grid__item">
-					<h3 class="grid__opcion">
-						<a href="CCategoria?action=formCategoria">Categorias</a>
-					</h3>
-					<img src="img/guayas.jpg" alt="" />
-				</div>
-				<div class="grid__item">
-					<h3 class="grid__opcion">
-						<a href="CPalabra?action=formPalabra">Palabras</a>
-					</h3>
-					<img src="img/santoDomingo.jpg" alt="" />
-				</div>
 			</div>
 		</div>
 		<footer class="footer">

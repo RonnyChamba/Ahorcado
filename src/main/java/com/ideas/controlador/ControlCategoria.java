@@ -9,6 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.json.simple.JSONObject;
 
 import com.ideas.commons.ExceptionData;
@@ -101,7 +103,10 @@ public class ControlCategoria extends HttpServlet {
 
 		try {
 			List<Categoria> categorias = daoCategoria.listar("");
-			request.setAttribute("categorias", categorias);
+			
+			HttpSession miSesion = request.getSession(true);
+			miSesion.setAttribute("categorias", categorias);
+			//request.setAttribute("categorias", categorias);
 
 		} catch (ExceptionData e) {
 			System.out.println(" ene el error " + e.getMessage());
