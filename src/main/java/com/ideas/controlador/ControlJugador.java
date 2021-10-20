@@ -17,7 +17,7 @@ import com.ideas.commons.ExceptionData;
 import com.ideas.dao.DAOJugador;
 import com.ideas.entidades.Jugador;
 
-@WebServlet(description = "Para manejar  las vistas de los jugadores", urlPatterns = { "/CJugador" })
+// @WebServlet(description = "Para manejar  las vistas de los jugadores", urlPatterns = { "/CJugador" })
 public class ControlJugador extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private DAOJugador daoJugador;

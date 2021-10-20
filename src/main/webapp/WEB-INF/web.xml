@@ -1,13 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
-  <display-name>ahorcado</display-name>
-  <welcome-file-list>
-  
-    <welcome-file>index.jsp</welcome-file>  
-    <welcome-file>index.htm</welcome-file> 
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	version="3.1">
+	<display-name>ahorcado</display-name>
+
+	<servlet>
+		<servlet-name>ServletCategoria</servlet-name>
+		<servlet-class>com.ideas.controlador.ControlCategoria</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ServletCategoria</servlet-name>
+		<url-pattern>/CCategoria</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>ServletJugador</servlet-name>
+		<servlet-class>com.ideas.controlador.ControlJugador</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ServletJugador</servlet-name>
+		<url-pattern>/CJugador</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ServletPalabra</servlet-name>
+		<servlet-class>com.ideas.controlador.ControlPalabra</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ServletPalabra</servlet-name>
+		<url-pattern>/CPalabra</url-pattern>
+	</servlet-mapping>
+	
+	<!-- DECLARACION DE FILTROS -->
+	<filter>
+		<filter-name>FiltroIndex</filter-name>
+		<filter-class>com.ideas.filters.FiltroIndex</filter-class> 
+	</filter>
+		
+	<filter>
+		<filter-name>FiltroMain</filter-name>
+		<filter-class>com.ideas.filters.FiltroMain</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>FiltroMain</filter-name>
+		<url-pattern>/menu-principal.jsp</url-pattern>
+		<url-pattern>/nueva-categoria.jsp</url-pattern>
+		<url-pattern>/nueva-palabra.jsp</url-pattern>
+		<url-pattern>/nuevo-jugador.jsp</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	
+	</filter-mapping>
+		<filter-mapping>
+		<filter-name>FiltroIndex</filter-name>
+		<url-pattern>/index.jsp</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+	
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+
+
 </web-app>

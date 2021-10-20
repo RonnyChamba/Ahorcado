@@ -19,7 +19,7 @@ import com.ideas.entidades.Palabra;
 import com.ideas.utilidades.UtilidadesCategoria;
 import com.ideas.utilidades.UtilidadesPalabra;
 
-@WebServlet(description = "Manejador de Palabras", urlPatterns = { "/CPalabra" })
+// @WebServlet(description = "Manejador de Palabras", urlPatterns = { "/CPalabra" })
 public class ControlPalabra extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

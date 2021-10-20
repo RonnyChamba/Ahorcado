@@ -16,13 +16,13 @@ import com.ideas.dao.DAOCategoria;
 import com.ideas.entidades.Categoria;
 import com.ideas.utilidades.UtilidadesCategoria;
 
-@WebServlet(description = "Manejador de todas las peticiones", urlPatterns = { "/CMain" })
-public class ControlMain extends HttpServlet {
+// @WebServlet(description = "Manejador de todas las peticiones", urlPatterns = { "/CMain" })
+public class ControlCategoria extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private DAOCategoria daoCategoria;
 
-	public ControlMain() {
+	public ControlCategoria() {
 
 		super();
 		daoCategoria = new DAOCategoria();

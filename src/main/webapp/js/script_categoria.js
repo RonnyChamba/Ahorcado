@@ -2,7 +2,7 @@ import { validarCategoria } from "./script.js";
 import { ajax, createQueryString } from "./ajax.js";
 import { showAlert } from "./alerts.js";
 
-const serlvet = "CMain";
+const serlvet = "CCategoria";
 const $formCategoria = document.forms["form-categoria"];
 const $formCategoriaTable = document.forms["form-table-categoria"];
 // Guardar el evento de un elemento, para saber en que fila estaba, utilil cuando actualizamos un registro 

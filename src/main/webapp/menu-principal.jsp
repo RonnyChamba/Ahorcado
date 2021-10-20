@@ -29,7 +29,7 @@
 			<div class="row grid">
 				<div class="grid__item">
 					<h3 class="grid__opcion">
-						<a href="CMain?action=jugar">Jugar</a>
+						<a href="#?action=jugar">Jugar</a>
 					</h3>
 					<img src="img/Azuay.png" alt="" />
 				</div>
@@ -46,7 +46,7 @@
 
 				<div class="grid__item">
 					<h3 class="grid__opcion">
-						<a href="CMain?action=formCategoria">Categorias</a>
+						<a href="CCategoria?action=formCategoria">Categorias</a>
 					</h3>
 					<img src="img/guayas.jpg" alt="" />
 				</div>
