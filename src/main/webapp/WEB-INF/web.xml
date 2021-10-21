@@ -3,14 +3,14 @@
 	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
-	<display-name>ahorcado</display-name> 
+	<display-name>ahorcado</display-name>
 
 	<servlet>
-		<servlet-name>ServletCategoria</servlet-name> 
+		<servlet-name>ServletCategoria</servlet-name>
 		<servlet-class>com.ideas.controlador.ControlCategoria</servlet-class>
 	</servlet>
 
-	<servlet-mapping> 
+	<servlet-mapping>
 		<servlet-name>ServletCategoria</servlet-name>
 		<url-pattern>/CCategoria</url-pattern>
 	</servlet-mapping>
@@ -36,12 +36,23 @@
 		<url-pattern>/CPalabra</url-pattern>
 	</servlet-mapping>
 	
+	<!-- PAGINAS DE ERROR -->
+	<servlet>
+		<servlet-name>ErrorPage</servlet-name>
+		<servlet-class>com.ideas.controlador.PageError</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ErrorPage</servlet-name>
+		<url-pattern>/Error</url-pattern>
+	</servlet-mapping>
+
 	<!-- DECLARACION DE FILTROS -->
 	<filter>
 		<filter-name>FiltroIndex</filter-name>
-		<filter-class>com.ideas.filters.FiltroIndex</filter-class> 
+		<filter-class>com.ideas.filters.FiltroIndex</filter-class>
 	</filter>
-		
+
 	<filter>
 		<filter-name>FiltroMain</filter-name>
 		<filter-class>com.ideas.filters.FiltroMain</filter-class>
@@ -53,13 +64,26 @@
 		<url-pattern>/nueva-palabra.jsp</url-pattern>
 		<url-pattern>/nuevo-jugador.jsp</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
-	
+
 	</filter-mapping>
-		<filter-mapping>
+	<filter-mapping>
 		<filter-name>FiltroIndex</filter-name>
 		<url-pattern>/index.jsp</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
+
+
+<!-- PAGINA DE ERROR -->
+	<error-page>
+	    <error-code>404</error-code>
+		<location>/Error</location>
+	</error-page>
+	
+	<error-page>
+	
+	  <exception-type>javax.servlet.ServletException</exception-type>
+		<location>/Error</location>
+	</error-page>
 	
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
