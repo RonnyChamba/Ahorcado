@@ -56,6 +56,12 @@
 						<img src="img/santoDomingo.jpg" alt="" />
 					</div>
 				</c:if>
+				<div class="grid__item">
+						<h3 class="grid__opcion">
+							<a href="CJugador?action=formMisJuegos">Mis Juegos</a>
+						</h3>
+						<img src="img/El Oro.jpg" alt="" />
+				</div>
 
 			</div>
 		</div>
