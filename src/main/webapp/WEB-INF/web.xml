@@ -36,6 +36,21 @@
 		<url-pattern>/CPalabra</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>ServletJuego</servlet-name>
+		<servlet-class>com.ideas.controlador.ControlJuego</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ServletJuego</servlet-name>
+		<url-pattern>/CJuego</url-pattern>
+	</servlet-mapping>
+	
+	
+	
+	
+	
+	
 	<!-- PAGINAS DE ERROR -->
 	<servlet>
 		<servlet-name>ErrorPage</servlet-name>
