@@ -10,7 +10,7 @@
 <link
 	href="https://file.myfontastic.com/JUwFAwWE8oUWFGdiTZSWaX/icons.css"
 	rel="stylesheet" />
-<link rel="stylesheet" href="css/normalize.css"/>
+<link rel="stylesheet" href="css/normalize.css" />
 <link rel="stylesheet" href="css/styel.css" />
 </head>
 <body>
@@ -74,7 +74,7 @@
 				</div>
 				<div class="jugar__item jugar__item--img-palabra">
 					<div class="jugar__img">
-						<img src="assets/img/ahorcado/ahor0.png" alt="Ahorcado" />
+						<img src="img/img-estado/ahor0.png" alt="Ahorcado" />
 					</div>
 					<div class="jugar__palabra">
 						<p>PALBARA A ENCONTRAR</p>
@@ -126,11 +126,7 @@
 			<div class="modal__item modal__item--contenido">
 				<span>Tipo categoria: </span> <select name="categoria"
 					id="categoria-modal">
-					<option value="">dd</option>
-					<option value="">dd</option>
-					<option value="">dsds</option>
-					<option value="">dsds</option>
-					<option value="">64gdf</option>
+					
 				</select>
 			</div>
 			<div class="modal__item modal__item--botones">
@@ -140,6 +136,6 @@
 		</div>
 		<div class="modal__close" id="modal-close">X</div>
 	</div>
-	<script src="assets/js/prueba.js"></script>
+	<script src="js/script_juego.js" type="module"></script>
 </body>
 </html>

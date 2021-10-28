@@ -29,7 +29,7 @@
 			<div class="row grid">
 				<div class="grid__item">
 					<h3 class="grid__opcion">
-						<a href="#?action=jugar">Jugar</a>
+						<a href="CJuego?action=jugar">Jugar</a>
 					</h3>
 					<img src="img/Azuay.png" alt="" />
 				</div>
