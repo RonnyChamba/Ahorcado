@@ -117,6 +117,8 @@
 				</div>
 			</section>
 		</div>
+
+		<div class="alert" id="alert"></div>
 	</div>
 	<div class="modal" id="modal">
 		<div class="modal__content modal__content--categoria"
@@ -126,12 +128,13 @@
 			<div class="modal__item modal__item--contenido">
 				<span>Tipo categoria: </span> <select name="categoria"
 					id="categoria-modal">
-					
+
 				</select>
 			</div>
 			<div class="modal__item modal__item--botones">
-				<button class="btn btn--send">Iniciar Juego</button>
-				<button class="btn btn--danger">Cancelar</button>
+				<button class="btn btn--send" id="btn-iniciar-juego">Iniciar
+					Juego</button>
+				<button class="btn btn--danger" id="btn-cancelar-juego">Cancelar</button>
 			</div>
 		</div>
 		<div class="modal__close" id="modal-close">X</div>

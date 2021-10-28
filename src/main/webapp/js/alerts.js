@@ -16,6 +16,7 @@ export function showAlert(parent, data) {
 	parent.innerHTML = "";
 	parent.appendChild(fragment);
 	parent.style.opacity = "1";
+	parent.style.zIndex = "9999";
 
 	// Cerrar cada alert__item de forma individual
 	[...parent.children].forEach((item) => {

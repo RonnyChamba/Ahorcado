@@ -1,10 +1,10 @@
 import { ajax, createQueryString } from "./ajax.js";
 import { showAlert } from "./alerts.js";
 
-console.log("holaaaa");
 const $botonesJugar = document.querySelector(".jugar__opcion");
 const $botonesLetra = document.querySelector(".jugar__item--letras");
 const $verAyuda = document.querySelector(".aside-menu__item");
+const $modal = document.getElementById("modal");
 const serlvet = "CJuego";
 
 $botonesJugar.addEventListener("click", (event) => {
@@ -15,16 +15,17 @@ $botonesLetra.addEventListener("click", (event) => {
 	console.log(event);
 });
 
+$modal.addEventListener("click", (event) => preIniciarJuego(event));
+
 function buttonJuego(event) {
 	if (event.target.id === "btn-play") {
-		consultarCategorias();
-		//openModal();
+		getCategorias();
 	}
 	if (event.target.id === "btn-pause") {
 	}
 }
 
-async function consultarCategorias() {
+async function getCategorias() {
 
 	openModal();
 	const datos = { action: "listarCategorias" }
@@ -39,15 +40,13 @@ async function consultarCategorias() {
 			setOpcionesSelect(responseCate);
 		}
 
-		// console.log("respuesta categoria: ", responseCate);
-
 	} catch (error) {
 
 	}
 
 }
 function openModal() {
-	document.getElementById("modal").classList.add("modal--show");
+	$modal.classList.add("modal--show");
 }
 
 function setOpcionesSelect(responseCate) {
@@ -55,17 +54,101 @@ function setOpcionesSelect(responseCate) {
 	// Arreglo de objetos(cada indice hay un arreglo como string)
 	let categorias = JSON.parse(responseCate.categorias);
 	const fragment = document.createDocumentFragment();
-	categorias.forEach((element) => {
-
+	categorias.forEach(element => {
 		let objCateSelect = JSON.parse(element);
 		let option = document.createElement("OPTION");
+
 		option.setAttribute("value", objCateSelect.id);
 		option.textContent = objCateSelect.name;
 		fragment.appendChild(option);
-		// console.log(objCateSelect);												
 	});
 
-	let $cateSelect = document.getElementById("categoria-modal");
+	let $cateSelect = $modal.querySelector("#categoria-modal");
 	$cateSelect.appendChild(fragment);
-	// console.log("categoriass parseadas ", categorias);
 }
+
+function preIniciarJuego(event) {
+	let element = event.target;
+	if (element.matches("button")) {
+		let buttonId = element.id;
+		if (buttonId === "btn-iniciar-juego") getOptionSeleccionada();
+		if (buttonId === "btn-cancelar-juego") {
+			console.log("cancelar");
+		}
+	}
+}
+
+function getOptionSeleccionada() {
+	let $optionSelect = $modal.querySelector("#categoria-modal");
+	let index = $optionSelect.selectedIndex;
+	if (index === -1) {
+		showMensajesNotificacion("noCategoria");
+		return;
+	}
+
+	let idCate = $optionSelect.options[index].value;
+	getDatosPalabra(idCate);
+}
+
+
+async function getDatosPalabra(idCategoria) {
+	const datos = { action: "datosPalabra", idCategoria }
+	let queryString = createQueryString(datos);
+	try {
+
+		let xhrPalabra = await ajax(serlvet, queryString);
+		let responsePalabra = xhrPalabra.xhr.responseText;
+		responsePalabra = JSON.parse(responsePalabra);
+
+		if (responsePalabra.estado) {
+			// Pintar los datos para jugar
+			setDatosPartida(responsePalabra.palabra);
+			return;
+		}
+
+		showMensajesNotificacion("noPalabraCate", responsePalabra.sms);
+	} catch (error) {
+
+	}
+
+}
+
+
+function setDatosPartida(dataPalabra){
+	
+	let objPalabra= JSON.parse(dataPalabra);
+	let objCatePalabra = JSON.parse(objPalabra.categoria);
+	// Aqui ya puedo ir pintando los datos
+	
+}
+
+function showMensajesNotificacion(tipoMensaje = "", mensaje ="") {
+	const data = {};
+	switch (tipoMensaje) {
+		case "noCategoria":
+			data["sms1"] = {
+				mensaje: "Tiene que seleccionar una categoria",
+				estado: "warning"
+			}
+
+			break;
+
+		case "noPalabraCate":
+			data["sms1"] = {
+				mensaje,
+				estado: "warning"
+			}
+
+			break;
+
+			
+
+		default:
+			break;
+	}
+
+
+	const $alert = document.getElementById("alert");
+	showAlert($alert, data);
+}
+

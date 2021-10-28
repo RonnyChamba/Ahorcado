@@ -14,18 +14,23 @@ import org.json.simple.JSONObject;
 
 import com.ideas.commons.ExceptionData;
 import com.ideas.dao.DAOCategoria;
+import com.ideas.dao.DAOJuego;
 import com.ideas.entidades.Categoria;
+import com.ideas.entidades.Palabra;
 import com.ideas.utilidades.UtilidadesCategoria;
+import com.ideas.utilidades.UtilidadesPalabra;
 
 public class ControlJuego extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private DAOCategoria daoCategoria;
+	private DAOJuego daoJuego;
        
   
     public ControlJuego() {
         super();
         // TODO Auto-generated constructor stub
     	daoCategoria = new DAOCategoria();
+    	daoJuego = new DAOJuego();
     }
 
 
@@ -50,6 +55,9 @@ public class ControlJuego extends HttpServlet {
 		case "listarcategorias":
 			listarCategorias(request, response);
 			break;
+		case "datospalabra":
+			getPalabraCategoria(request, response);
+			break;
 
 		default:
 			break;
@@ -57,7 +65,7 @@ public class ControlJuego extends HttpServlet {
 
 	}
 	
-	protected void mostrarForm(HttpServletRequest request, HttpServletResponse response, String path)
+	private void mostrarForm(HttpServletRequest request, HttpServletResponse response, String path)
 			throws ServletException, IOException {
 
 		request.getRequestDispatcher(path).forward(request, response);
@@ -65,7 +73,7 @@ public class ControlJuego extends HttpServlet {
 	}
 	
 	
-	protected void listarCategorias(HttpServletRequest request, HttpServletResponse response)
+	private void listarCategorias(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		JSONObject json = new JSONObject();
@@ -83,6 +91,29 @@ public class ControlJuego extends HttpServlet {
 			
 		}
 		
+		response.getWriter().print(json.toJSONString());
+	}
+
+	private void getPalabraCategoria(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		JSONObject json = new JSONObject();
+		
+		try {
+			
+			String idCategoria = request.getParameter("idCategoria");
+			Palabra palabra = daoJuego.getPalabraJuego(idCategoria);
+			boolean estado = palabra !=null;
+			json.put("estado", estado);
+			if (estado) 				
+				json.put("palabra", UtilidadesPalabra.jsonString(palabra));
+			else json.put("sms", "No existe palabras disponibles para la categoria");
+		} catch (ExceptionData e) {
+			
+			json.put("estado", false);
+			json.put("sms", e.getMessage());
+			
+		}		
 		response.getWriter().print(json.toJSONString());
 	}
 }
