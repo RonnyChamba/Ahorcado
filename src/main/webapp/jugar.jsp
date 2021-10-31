@@ -22,21 +22,21 @@
 					<div class="row">
 						<span>Categoria:</span>
 						<div class="aside-menu__option aside-menu__option--flex">
-							<p>sasasdsdf</p>
+							<p class ="help-juego help-categoria">sasasdsdf</p>
 							<span class="icon-eye"></span>
 						</div>
 					</div>
 					<div class="row">
-						<span>Descripcion:</span>
+						<span>Desc Categoria:</span>
 						<div class="aside-menu__option aside-menu__option--flex">
-							<p>sasasdsdf</p>
+							<p class ="help-juego help-desc-categoria">sasasdsdf</p>
 							<span class="icon-eye"></span>
 						</div>
 					</div>
 					<div class="row">
-						<span>Longitud:</span>
+						<span>Desc Palabra:</span>
 						<div class="aside-menu__option aside-menu__option--flex">
-							<p>sasasdsdf</p>
+							<p class ="help-juego help-desc-palabra">sasasdsdf</p>
 							<span class="icon-eye"></span>
 						</div>
 					</div>
@@ -74,10 +74,10 @@
 				</div>
 				<div class="jugar__item jugar__item--img-palabra">
 					<div class="jugar__img">
-						<img src="img/img-estado/ahor0.png" alt="Ahorcado" />
+						<img src="img/img-estado/ahor0.png" alt="Ahorcado" id="img-juego-main" />
 					</div>
 					<div class="jugar__palabra">
-						<p>PALBARA A ENCONTRAR</p>
+						<p class ="palabra-buscar" id="palabra-juego-main">PALBARA A ENCONTRAR</p>
 					</div>
 				</div>
 				<div class="jugar__item jugar__item--letras">

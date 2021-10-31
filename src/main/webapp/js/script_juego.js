@@ -1,12 +1,13 @@
 import { ajax, createQueryString } from "./ajax.js";
 import { showAlert } from "./alerts.js";
-import { Partida } from "./partida.js";
+import { Partida } from "./script_partida.js";
 
 const $botonesJugar = document.querySelector(".jugar__opcion");
 const $botonesLetra = document.querySelector(".jugar__item--letras");
 const $verAyuda = document.querySelector(".aside-menu__item");
 const $modal = document.getElementById("modal");
 const serlvet = "CJuego";
+let miPartida = null
 
 $botonesJugar.addEventListener("click", (event) => {
 	if (event.target.matches("button")) buttonJuego(event);
@@ -28,7 +29,7 @@ function buttonJuego(event) {
 
 async function getCategorias() {
 
-	openModal();
+	$modal.classList.add("modal--show");
 	const datos = { action: "listarCategorias" }
 	let queryString = createQueryString(datos);
 
@@ -65,6 +66,7 @@ function setOpcionesSelect(responseCate) {
 	});
 
 	let $cateSelect = $modal.querySelector("#categoria-modal");
+	$cateSelect.innerHTML ="";
 	$cateSelect.appendChild(fragment);
 }
 
@@ -72,10 +74,8 @@ function preIniciarJuego(event) {
 	let element = event.target;
 	if (element.matches("button")) {
 		let buttonId = element.id;
-		console.log(buttonId);			
-		if (buttonId === "btn-iniciar-juego")  {
-		getOptionSeleccionada();
-		}
+		if (buttonId === "btn-iniciar-juego") getOptionSeleccionada();
+
 		if (buttonId === "btn-cancelar-juego") {
 			console.log("cancelar");
 		}
@@ -118,20 +118,68 @@ async function getDatosPalabra(idCategoria) {
 }
 
 
-function setDatosPartida(dataPalabra){
+async function setDatosPartida(dataPalabra) {
+
+	let objPalabra = JSON.parse(dataPalabra);
+	miPartida = new Partida(objPalabra);
 	
-	
-	let objPalabra= JSON.parse(dataPalabra);
-	console.log(objPalabra);
-	const miPartida = new Partida(objPalabra);
-	console.log(miPartida.getPalabra);
-	console.log(miPartida.getCategoria);
-	// let objCatePalabra = JSON.parse(objPalabra.categoria);
-	// Aqui ya puedo ir pintando los datos
-	
+	try{
+		
+		let datosCargados = await datosOk();
+		console.log(datosCargados);
+		
+		if (datosCargados){
+			$modal.classList.remove("modal--show");
+		}
+		
+	}catch(error){
+		
+		
+	}
+
+
 }
 
-function showMensajesNotificacion(tipoMensaje = "", mensaje ="") {
+function datosOk() {
+
+	const miPromise = new Promise((resolve, reject) => {
+		// Asignar los datos de ayuda(aside)
+		setOptionsAyuda();
+		setPalabraImgJuego();
+		resolve({estado:true});
+	});
+	return miPromise;
+
+
+}
+
+function setOptionsAyuda() {
+	const $helpOptions = $verAyuda.querySelectorAll(".row .help-juego");
+	$helpOptions.forEach((elemento) => {
+
+		if (elemento.classList.contains("help-categoria")) {
+			elemento.textContent = miPartida.getCategoria.name;
+		}
+		if (elemento.classList.contains("help-desc-categoria")) {
+			elemento.textContent = miPartida.getCategoria.descripcion;
+		}
+		if (elemento.classList.contains("help-desc-palabra")) {
+			elemento.textContent = `${miPartida.getPalabra.descripcion}`;
+		}
+	});
+
+
+
+}
+function setPalabraImgJuego() {
+	const $palabraJuego = document.getElementById("palabra-juego-main");
+	$palabraJuego.textContent = miPartida.mostrarTextoPalabra();
+
+	const $imgJuego = document.getElementById("img-juego-main");
+	$imgJuego.setAttribute("src", miPartida.getPathImg);
+}
+
+function showMensajesNotificacion(tipoMensaje = "", mensaje = "") {
 	const data = {};
 	switch (tipoMensaje) {
 		case "noCategoria":
@@ -150,7 +198,7 @@ function showMensajesNotificacion(tipoMensaje = "", mensaje ="") {
 
 			break;
 
-			
+
 
 		default:
 			break;

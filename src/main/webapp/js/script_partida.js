@@ -46,6 +46,6 @@ export class Partida {
 		return this.puntosPartida;
 	}
 	get getPathImg() {
-		return `../img/img-estado/ahor${this.numeroIntentos}.png`;
+		return `img/img-estado/ahor${(this.numeroIntentos +1)}.png`;
 	}
 }
