@@ -23,34 +23,41 @@ function buttonJuego(event) {
 	if (event.target.id === "btn-play") {
 		getCategorias();
 	}
-	if (event.target.id === "btn-pause") {
-	}
+	if (event.target.id === "btn-pause") cancelPartida();
 }
 
 async function getCategorias() {
 
-	$modal.classList.add("modal--show");
-	const datos = { action: "listarCategorias" }
-	let queryString = createQueryString(datos);
+	// Validar si existe un juego activo
+	if (miPartida === null) {
 
-	try {
-		let xhrCategoria = await ajax(serlvet, queryString);
-		let responseCate = xhrCategoria.xhr.responseText;
-		responseCate = JSON.parse(responseCate);
+		const datos = { action: "listarCategorias" }
+		let queryString = createQueryString(datos);
 
-		if (responseCate.estado) {
-			setOpcionesSelect(responseCate);
+		try {
+			let xhrCategoria = await ajax(serlvet, queryString);
+			let responseCate = xhrCategoria.xhr.responseText;
+			responseCate = JSON.parse(responseCate);
+
+			if (responseCate.estado) {
+				setOpcionesSelect(responseCate);
+			}
+
+		} catch (error) {
+
 		}
-
-	} catch (error) {
-
+		$modal.classList.add("modal--show");
+		return ;
 	}
+	
+	showMensajesNotificacion("noRepeatJuego");
 
 }
-function openModal() {
-	$modal.classList.add("modal--show");
-}
 
+function cancelPartida(){
+	
+	
+}
 function setOpcionesSelect(responseCate) {
 
 	// Arreglo de objetos(cada indice hay un arreglo como string)
@@ -66,7 +73,7 @@ function setOpcionesSelect(responseCate) {
 	});
 
 	let $cateSelect = $modal.querySelector("#categoria-modal");
-	$cateSelect.innerHTML ="";
+	$cateSelect.innerHTML = "";
 	$cateSelect.appendChild(fragment);
 }
 
@@ -77,7 +84,8 @@ function preIniciarJuego(event) {
 		if (buttonId === "btn-iniciar-juego") getOptionSeleccionada();
 
 		if (buttonId === "btn-cancelar-juego") {
-			console.log("cancelar");
+			//console.log("cancelar");
+			$modal.classList.remove("modal--show");
 		}
 	}
 }
@@ -122,19 +130,19 @@ async function setDatosPartida(dataPalabra) {
 
 	let objPalabra = JSON.parse(dataPalabra);
 	miPartida = new Partida(objPalabra);
-	
-	try{
-		
+
+	try {
+
 		let datosCargados = await datosOk();
 		console.log(datosCargados);
-		
-		if (datosCargados){
+
+		if (datosCargados) {
 			$modal.classList.remove("modal--show");
 		}
-		
-	}catch(error){
-		
-		
+
+	} catch (error) {
+
+
 	}
 
 
@@ -146,7 +154,7 @@ function datosOk() {
 		// Asignar los datos de ayuda(aside)
 		setOptionsAyuda();
 		setPalabraImgJuego();
-		resolve({estado:true});
+		resolve({ estado: true });
 	});
 	return miPromise;
 
@@ -197,7 +205,14 @@ function showMensajesNotificacion(tipoMensaje = "", mensaje = "") {
 			}
 
 			break;
+		case "noRepeatJuego":
+			data["sms1"] = {
+				mensaje: "Existe un juego activo, no puede crear otro",
+				estado: "warning"
+			}
 
+			break;
+		
 
 
 		default:
