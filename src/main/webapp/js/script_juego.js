@@ -1,5 +1,6 @@
 import { ajax, createQueryString } from "./ajax.js";
 import { showAlert } from "./alerts.js";
+import { Partida } from "./partida.js";
 
 const $botonesJugar = document.querySelector(".jugar__opcion");
 const $botonesLetra = document.querySelector(".jugar__item--letras");
@@ -71,7 +72,10 @@ function preIniciarJuego(event) {
 	let element = event.target;
 	if (element.matches("button")) {
 		let buttonId = element.id;
-		if (buttonId === "btn-iniciar-juego") getOptionSeleccionada();
+		console.log(buttonId);			
+		if (buttonId === "btn-iniciar-juego")  {
+		getOptionSeleccionada();
+		}
 		if (buttonId === "btn-cancelar-juego") {
 			console.log("cancelar");
 		}
@@ -116,8 +120,13 @@ async function getDatosPalabra(idCategoria) {
 
 function setDatosPartida(dataPalabra){
 	
+	
 	let objPalabra= JSON.parse(dataPalabra);
-	let objCatePalabra = JSON.parse(objPalabra.categoria);
+	console.log(objPalabra);
+	const miPartida = new Partida(objPalabra);
+	console.log(miPartida.getPalabra);
+	console.log(miPartida.getCategoria);
+	// let objCatePalabra = JSON.parse(objPalabra.categoria);
 	// Aqui ya puedo ir pintando los datos
 	
 }
