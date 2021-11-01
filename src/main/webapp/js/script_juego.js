@@ -16,9 +16,7 @@ $botonesJugar.addEventListener("click", (event) => {
 	if (event.target.matches("button")) buttonJuego(event);
 });
 
-$botonesLetra.addEventListener("click", (event) => {
-	console.log(event);
-});
+$botonesLetra.addEventListener("click", (event) => clickBtnLetras(event));
 
 $modal.addEventListener("click", (event) => preIniciarJuego(event));
 
@@ -113,10 +111,10 @@ async function getCategorias() {
 function cancelPartida() {
 
 	setOptionsAyuda(false);
-	setPalabraImgJuego(false);	
+	setPalabraImgJuego(false);
 	miPartida = null;
 	$modal.classList.remove("modal--show");
-	
+
 }
 function setOpcionesSelect(responseCate) {
 
@@ -216,7 +214,7 @@ function datosOk() {
 	const miPromise = new Promise((resolve, reject) => {
 		// Asignar los datos de ayuda(aside)
 		setOptionsAyuda(true);
-		setPalabraImgJuego();
+		setPalabraImgJuego(true);
 		resolve({ estado: true });
 	});
 	return miPromise;
@@ -244,16 +242,16 @@ function setOptionsAyuda(tipoAccion = true) {
 
 }
 function setPalabraImgJuego(tipoAccion = true) {
-	
+
 	/* 
 	true: nuevo juego
 	false: resetear
 	 */
 	const $palabraJuego = document.getElementById("palabra-juego-main");
-	$palabraJuego.textContent = tipoAccion? miPartida.mostrarTextoPalabra(): "COMIENZA A JUGAR";
+	$palabraJuego.textContent = tipoAccion ? miPartida.mostrarTextoPalabra() : "COMIENZA A JUGAR";
 
-	const $imgJuego = document.getElementById("img-juego-main"); 
-	$imgJuego.setAttribute("src", tipoAccion? miPartida.getPathImg: "img/img-estado/ahor0.png");
+	const $imgJuego = document.getElementById("img-juego-main");
+	$imgJuego.setAttribute("src", tipoAccion ? miPartida.getPathImg:"img/img-estado/ahor0.png");
 }
 
 function showMensajesNotificacion(tipoMensaje = "", mensaje = "") {
@@ -288,9 +286,6 @@ function showMensajesNotificacion(tipoMensaje = "", mensaje = "") {
 			}
 
 			break;
-
-
-
 		default:
 			break;
 	}
@@ -298,6 +293,30 @@ function showMensajesNotificacion(tipoMensaje = "", mensaje = "") {
 
 	const $alert = document.getElementById("alert");
 	showAlert($alert, data);
+}
+
+function clickBtnLetras(event) {
+
+	let typeElement = event.target;
+	
+	if (typeElement.matches("button") && miPartida !== null) {					
+		let letraPresionada = typeElement.textContent;
+		let isContentLetra = miPartida.verificarLetraContenida(letraPresionada);
+		setPalabraImgJuego(true);
+		if (!isContentLetra){
+				
+		}	
+		console.log("Letra presioanda ", letraPresionada);
+		return ;	
+	}
+	
+	/*
+	if (typeElement.matches("button")){
+		
+		console.log("No hayuna partid actual");
+	}
+	*/
+	
 }
 
 console.log("LEIDO JUEGO")
