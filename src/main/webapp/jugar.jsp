@@ -77,7 +77,7 @@
 						<img src="img/img-estado/ahor0.png" alt="Ahorcado" id="img-juego-main" />
 					</div>
 					<div class="jugar__palabra">
-						<p class ="palabra-buscar" id="palabra-juego-main">PALBARA A ENCONTRAR</p>
+						<p class ="palabra-buscar" id="palabra-juego-main">COMIENZA A JUGAR</p>
 					</div>
 				</div>
 				<div class="jugar__item jugar__item--letras">
@@ -121,22 +121,18 @@
 		<div class="alert" id="alert"></div>
 	</div>
 	<div class="modal" id="modal">
-		<div class="modal__content modal__content--categoria"
-			id="modal-content">
-			<h2 class="modal__title">Seleccione una categoria</h2>
-
-			<div class="modal__item modal__item--contenido">
-				<span>Tipo categoria: </span> <select name="categoria"
-					id="categoria-modal">
-
-				</select>
-			</div>
+		<div class="modal__content" id="modal-content">
+			<h2 class="modal__title"></h2>
+			  <div class="modal__item modal__item-content"></div>
 			<div class="modal__item modal__item--botones">
-				<button class="btn btn--send" id="btn-iniciar-juego">Iniciar
-					Juego</button>
-				<button class="btn btn--danger" id="btn-cancelar-juego">Cancelar</button>
+				<button class="btn btn--send"   id="modal-btn-aceptar">Aceptar</button>
+				<button class="btn btn--danger" id="modal-btn-cancelar">Cancelar</button>
 			</div>
 		</div>
+		
+		<div class="modal__load">
+        <p class="modal__load-barra">Cargando datos......</p>
+      </div>
 		<div class="modal__close" id="modal-close">X</div>
 	</div>
 	<script src="js/script_juego.js" type="module"></script>
