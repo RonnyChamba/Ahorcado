@@ -114,6 +114,7 @@
 						<button class="btn btn__juego btn__juego--letra">N</button>
 						<button class="btn btn__juego btn__juego--letra">M</button>
 					</div>
+					 <div class="jugar__item--letras-load"></div>
 				</div>
 			</section>
 		</div>
@@ -125,8 +126,8 @@
 			<h2 class="modal__title"></h2>
 			  <div class="modal__item modal__item-content"></div>
 			<div class="modal__item modal__item--botones">
-				<button class="btn btn--send"   id="modal-btn-aceptar">Aceptar</button>
-				<button class="btn btn--danger" id="modal-btn-cancelar">Cancelar</button>
+				<button class="btn btn--send"   id="modal-btn-aceptar" data-action="modal-btn-aceptar">Aceptar</button>
+				<button class="btn btn--danger" id="modal-btn-cancelar" data-action="modal-btn-cancelar">Cancelar</button>
 			</div>
 		</div>
 		

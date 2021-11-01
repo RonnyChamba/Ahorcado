@@ -18,6 +18,22 @@ export function createWraperCategoria() {
 	return wraperSelect;
 }
 
+/*Modal para mostrar al ganar o perder la partida */
+export function createWraperResultado() {
+  let wraperResultado = document.createElement("DIV");
+  wraperResultado.classList.add("modal-content-resultado");
+
+  let img = document.createElement("IMG");
+  img.setAttribute("src", "");
+  img.setAttribute("id", "modal-img-resultado")	
+  img.classList.add("modal-content-resultado-img");
+
+  let mensaje = createWraperMensaje("Has Perdido la partida");
+  wraperResultado.appendChild(img);
+  wraperResultado.appendChild(mensaje);
+  return wraperResultado;
+}
+
 // Se lo llama varias veces
 export function createWraperMensaje(mensaje = "Mensaje del sistema") {
 	let wraper = document.createElement("DIV");
@@ -40,3 +56,14 @@ export function changeTextBtnTitle(datos) {
 		? "Cancelar"
 		: datos.btnCancelar;
 }
+
+export function createWraperBotones(mensaje = "Aceptar") {
+  let wraper = document.createElement("DIV");
+  let mensajeModal = document.createElement("BUTTON");
+  mensajeModal.textContent = mensaje;
+  mensajeModal.setAttribute("id", "modal-fin-juego");
+  mensajeModal.classList.add("button-accion");
+  wraper.appendChild(mensajeModal);
+  return wraper;
+}
+

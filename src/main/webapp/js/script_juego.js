@@ -2,12 +2,13 @@ import { ajax, createQueryString } from "./ajax.js";
 import { showAlert } from "./alerts.js";
 import { Partida } from "./script_partida.js";
 
-import { createWraperCategoria, createWraperMensaje, changeTextBtnTitle, $modal } from "./script_modal.js";
+import { createWraperCategoria, createWraperMensaje, changeTextBtnTitle,createWraperResultado, $modal } from "./script_modal.js";
 
 const $botonesJugar = document.querySelector(".jugar__opcion");
 const $botonesLetra = document.querySelector(".jugar__item--letras");
 const $verAyuda = document.querySelector(".aside-menu__item");
 const $modalContentSelect = createWraperCategoria();
+const $modalContentResultado = createWraperResultado();
 // const $modal = document.getElementById("modal");
 const serlvet = "CJuego";
 let miPartida = null
@@ -51,7 +52,14 @@ async function selectContentModal(tipoAccionModal) {
 			let data = dataCancelarJuego();
 			nuevoContentShow = data.nuevoContent;
 			dataSmsGeneral = data.sms;
+		// Se lanza cuando acierto o pierdo la partida(se ejecuta automaticamente)	
+		}else if (tipoAccionModal === "fin-juego") {
+			let data = dataFinPartidaJuego();
+			nuevoContentShow = data.nuevoContent;
+			dataSmsGeneral = data.sms;
 		}
+		
+		
 		// Wraper para del nuevo contenido  modal
 		let $modalContent = $modal.querySelector(".modal__item-content");
 		// Limpiar contenido
@@ -90,6 +98,22 @@ function dataCancelarJuego() {
 	return { nuevoContent, sms: datosMensaje };
 }
 
+
+function dataFinPartidaJuego() {
+	// Enviar el modal__load detras del contenido a mostrar
+	$modal.querySelector(".modal__load").classList.add("modal__load--hide");
+	
+	let nuevoContent = $modalContentResultado;
+	let datosMensaje = {
+		title: "Fin del Juego",
+		btnOk: "Aceptar",
+		btnCancelar: "Ver Detalles",
+	};
+	return { nuevoContent, sms: datosMensaje };
+}
+
+
+
 async function getCategorias() {
 	try {
 		const datos = { action: "listarCategorias" };
@@ -108,14 +132,7 @@ async function getCategorias() {
 	}
 }
 
-function cancelPartida() {
 
-	setOptionsAyuda(false);
-	setPalabraImgJuego(false);
-	miPartida = null;
-	$modal.classList.remove("modal--show");
-
-}
 function setOpcionesSelect(responseCate) {
 
 	// Arreglo de objetos(cada indice hay un arreglo como string)
@@ -145,21 +162,39 @@ function setOpcionesSelect(responseCate) {
 function preIniciarJuego(event) {
 	let element = event.target;
 	if (element.matches("button")) {
-		let buttonId = element.id;
+		let buttonAction = element.dataset["action"];
+		console.log("Data Action : ",element.dataset);
 
 		// Nuevo Juego
-		if (buttonId === "modal-btn-aceptar" && miPartida === null) getOptionSeleccionada();
+		if (buttonAction === "modal-btn-aceptar" && miPartida === null) getOptionSeleccionada();
 
 		// Seguir Jugando
-		if (buttonId === "modal-btn-aceptar" && miPartida !== null) $modal.classList.remove("modal--show");
+		if (buttonAction === "modal-btn-aceptar" && miPartida !== null) $modal.classList.remove("modal--show");
 
 		// Opcion Cancelada nuevo Juego
-		if (buttonId === "modal-btn-cancelar" && miPartida === null) $modal.classList.remove("modal--show");
+		if (buttonAction === "modal-btn-cancelar" && miPartida === null) $modal.classList.remove("modal--show");
 
 		// Cancelar Partida en Juego
-		if (buttonId === "modal-btn-cancelar" && miPartida !== null) cancelPartida();
+		if (buttonAction === "modal-btn-cancelar" && miPartida !== null) cancelPartida();
+		
+		// Finaliza el juego(pierda o gane) y acepta 
+		if (buttonAction === "modal-btn-aceptar-fin-juego")  {
+			
+			
+			aceptarFinPartida();
+		}
 	}
+	
 }
+
+
+// Cuando se gane o pierda
+function aceptarFinPartida(){
+	let partidaGuardar = miPartida;
+	
+	
+}
+
 
 function getOptionSeleccionada() {
 	let $optionSelect = $modal.querySelector("#modal-categoria");
@@ -241,6 +276,15 @@ function setOptionsAyuda(tipoAccion = true) {
 
 
 }
+
+function cancelPartida() {
+	setOptionsAyuda(false);
+	setPalabraImgJuego(false);
+	miPartida = null;
+	$modal.classList.remove("modal--show");
+
+}
+
 function setPalabraImgJuego(tipoAccion = true) {
 
 	/* 
@@ -251,7 +295,7 @@ function setPalabraImgJuego(tipoAccion = true) {
 	$palabraJuego.textContent = tipoAccion ? miPartida.mostrarTextoPalabra() : "COMIENZA A JUGAR";
 
 	const $imgJuego = document.getElementById("img-juego-main");
-	$imgJuego.setAttribute("src", tipoAccion ? miPartida.getPathImg:"img/img-estado/ahor0.png");
+	$imgJuego.setAttribute("src", tipoAccion ? miPartida.getPathImg: "img/img-estado/ahor0.png");
 }
 
 function showMensajesNotificacion(tipoMensaje = "", mensaje = "") {
@@ -297,26 +341,35 @@ function showMensajesNotificacion(tipoMensaje = "", mensaje = "") {
 
 function clickBtnLetras(event) {
 
-	let typeElement = event.target;
-	
-	if (typeElement.matches("button") && miPartida !== null) {					
+	if (miPartida !== null) {
+
+		let typeElement = event.target;
 		let letraPresionada = typeElement.textContent;
-		let isContentLetra = miPartida.verificarLetraContenida(letraPresionada);
-		setPalabraImgJuego(true);
-		if (!isContentLetra){
-				
-		}	
-		console.log("Letra presioanda ", letraPresionada);
-		return ;	
-	}
-	
-	/*
-	if (typeElement.matches("button")){
+		// Verificar si es button  y ademas que si ya fue presionada o no anteriormente
+		if (typeElement.matches("button") && !miPartida.getLetrasPulsadas.includes(letraPresionada)) {
+			
+			// Cambiar el tipo de cursor para el elemento presionado
+			typeElement.classList.add("btn-cursor-no-pointer");		
+			let isContentLetra = miPartida.verificarLetraContenida(letraPresionada);
+			setPalabraImgJuego(true);
 		
-		console.log("No hayuna partid actual");
+			console.log("Is fin juego ", miPartida.isFinJuego);
+			console.log("Letra presioanda ", letraPresionada);
+			console.log("lista de letras ", miPartida.getLetrasPulsadas);
+			console.log("Palabra adivinada ", miPartida.getPalabraAcertada);
+			
+			if (miPartida.isFinJuego){
+				$modalContentResultado.querySelector("#modal-img-resultado").setAttribute("src", miPartida.getPathImg);			
+				$modalContentResultado.querySelector(".modal__mensaje").textContent =miPartida.getSmsFinJuego;
+				$modal.querySelector("#modal-btn-aceptar").dataset["action"] ="modal-btn-aceptar-fin-juego";	
+				selectContentModal("fin-juego");
+			}   	
+		}
+		return;
 	}
-	*/
 	
+	console.log("No existe una partida actual");
+
 }
 
 console.log("LEIDO JUEGO")
