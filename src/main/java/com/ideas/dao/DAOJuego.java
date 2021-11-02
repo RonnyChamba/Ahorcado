@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 
 import com.ideas.commons.ExceptionData;
 import com.ideas.conf.Coneccion;
+import com.ideas.entidades.Juego;
 import com.ideas.entidades.Palabra;
 
 public class DAOJuego {
@@ -51,5 +52,29 @@ public class DAOJuego {
 		
 		return palabra;	
 	}
+
+	
+	public boolean insert(Juego entidad)  throws ExceptionData{
+		
+		PreparedStatement pr = null;
+
+		try {
+			pr = coneccion.getConection().prepareStatement("INSERT INTO JUEGOS VALUES (NULL, ?,?,?,?,?)");
+			pr.setString(1,  entidad.getFecha());
+			pr.setInt(2, entidad.getTiempo());
+			pr.setDouble(3, entidad.getPuntaje());
+			pr.setString(4,  entidad.getPalabras().get(0).getIdPalabra());
+			pr.setString(5, entidad.getJugador().getIdJugador());
+			
+			return pr.executeUpdate()>0;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(this.getClass().getSimpleName() +" Error al insertar: " + e.getMessage() );
+			throw new ExceptionData("Error al insertar, no se guardo el juego");
+		}
+		
+	}
+	
 		
 }

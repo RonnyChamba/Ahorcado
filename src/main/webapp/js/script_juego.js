@@ -2,7 +2,7 @@ import { ajax, createQueryString } from "./ajax.js";
 import { showAlert } from "./alerts.js";
 import { Partida } from "./script_partida.js";
 
-import { createWraperCategoria, createWraperMensaje, changeTextBtnTitle,createWraperResultado, $modal } from "./script_modal.js";
+import { createWraperCategoria, createWraperMensaje, changeTextBtnTitle, createWraperResultado, $modal } from "./script_modal.js";
 
 const $botonesJugar = document.querySelector(".jugar__opcion");
 const $botonesLetra = document.querySelector(".jugar__item--letras");
@@ -24,14 +24,12 @@ $modal.addEventListener("click", (event) => preIniciarJuego(event));
 function buttonJuego(event) {
 
 	let idButton = event.target.id;
-	let mensaje = "";
-
 	if ((idButton === "btn-play" && miPartida === null)
 		|| (idButton === "btn-pause" && miPartida !== null)) {
 		selectContentModal(idButton);
 		return;
 	}
-	mensaje = idButton === "btn-play" ? "noRepeatJuego" : "noActiveJuego";
+	let mensaje = idButton === "btn-play" ? "Hay un juego Activo, no puede crear otro" : "No hay un juego Activo para detener";
 	showMensajesNotificacion(mensaje);
 }
 
@@ -52,14 +50,14 @@ async function selectContentModal(tipoAccionModal) {
 			let data = dataCancelarJuego();
 			nuevoContentShow = data.nuevoContent;
 			dataSmsGeneral = data.sms;
-		// Se lanza cuando acierto o pierdo la partida(se ejecuta automaticamente)	
-		}else if (tipoAccionModal === "fin-juego") {
+			// Se lanza cuando acierto o pierdo la partida(se ejecuta automaticamente)	
+		} else if (tipoAccionModal === "fin-juego") {
 			let data = dataFinPartidaJuego();
 			nuevoContentShow = data.nuevoContent;
 			dataSmsGeneral = data.sms;
 		}
-		
-		
+
+
 		// Wraper para del nuevo contenido  modal
 		let $modalContent = $modal.querySelector(".modal__item-content");
 		// Limpiar contenido
@@ -102,7 +100,7 @@ function dataCancelarJuego() {
 function dataFinPartidaJuego() {
 	// Enviar el modal__load detras del contenido a mostrar
 	$modal.querySelector(".modal__load").classList.add("modal__load--hide");
-	
+
 	let nuevoContent = $modalContentResultado;
 	let datosMensaje = {
 		title: "Fin del Juego",
@@ -163,7 +161,7 @@ function preIniciarJuego(event) {
 	let element = event.target;
 	if (element.matches("button")) {
 		let buttonAction = element.dataset["action"];
-		console.log("Data Action : ",element.dataset);
+		// console.log("Data Action : ", element.dataset);
 
 		// Nuevo Juego
 		if (buttonAction === "modal-btn-aceptar" && miPartida === null) getOptionSeleccionada();
@@ -176,31 +174,66 @@ function preIniciarJuego(event) {
 
 		// Cancelar Partida en Juego
 		if (buttonAction === "modal-btn-cancelar" && miPartida !== null) cancelPartida();
-		
+
 		// Finaliza el juego(pierda o gane) y acepta 
-		if (buttonAction === "modal-btn-aceptar-fin-juego")  {
-			
-			
-			aceptarFinPartida();
-		}
+		if (buttonAction === "modal-btn-aceptar-fin-juego") aceptarFinPartida();
+		
 	}
-	
+
 }
 
 
-// Cuando se gane o pierda
-function aceptarFinPartida(){
-	let partidaGuardar = miPartida;
-	
-	
+// Cuando se gane o pierda, boton aceptar del modal
+function aceptarFinPartida() {
+	// let partidaGuardar = miPartida;
+	$modal.classList.remove("modal--show");
+		
+	let idPalabra = miPartida.getPalabra.id;
+	let puntaje = miPartida.getPuntos;
+	let tiempo = 30;
+	let fechaJuego = miPartida.getFechaJuego;
+	const datos = {
+		action: "guardarJuego",
+		idPalabra,
+		puntaje,
+		tiempo,
+		fechaJuego
+	}
+
+	guardarJuegoBD(datos);
+	cancelPartida(); // llamar despues de guardarJuegos BD
+	$modal.querySelector("#modal-btn-aceptar").dataset["action"] = "modal-btn-aceptar";
+	$modal.querySelector("#modal-btn-cancelar").dataset["action"] = "modal-btn-cancelar";
 }
+
+
+
+async function guardarJuegoBD(datos) {
+
+	try {
+		let queryString = createQueryString(datos);
+		let xhrGuadarJuego = await ajax(serlvet, queryString);
+		let responseJuego = xhrGuadarJuego.xhr.responseText;
+		responseJuego = JSON.parse(responseJuego);
+		showMensajesNotificacion(responseJuego.sms,  responseJuego.estado?"succes":"warning" );
+		
+		
+		
+	} catch (error) {
+		// Error de ajax o error de este bloque
+		console.log("Error en guarsar Juego ", error);
+	}finally {
+		
+	}
+}
+
 
 
 function getOptionSeleccionada() {
 	let $optionSelect = $modal.querySelector("#modal-categoria");
 	let index = $optionSelect.selectedIndex;
 	if (index === -1) {
-		showMensajesNotificacion("noCategoria");
+		showMensajesNotificacion("Tiene que seleccionar una categoria");
 		return;
 	}
 
@@ -223,7 +256,7 @@ async function getDatosPalabra(idCategoria) {
 			return;
 		}
 
-		showMensajesNotificacion("noPalabraCate", responsePalabra.sms);
+		showMensajesNotificacion(responsePalabra.sms);
 	} catch (error) {
 
 	}
@@ -298,43 +331,14 @@ function setPalabraImgJuego(tipoAccion = true) {
 	$imgJuego.setAttribute("src", tipoAccion ? miPartida.getPathImg: "img/img-estado/ahor0.png");
 }
 
-function showMensajesNotificacion(tipoMensaje = "", mensaje = "") {
-	const data = {};
-	switch (tipoMensaje) {
-		case "noCategoria":
-			data["sms1"] = {
-				mensaje: "Tiene que seleccionar una categoria",
-				estado: "warning"
-			}
-
-			break;
-
-		case "noPalabraCate":
-			data["sms1"] = {
-				mensaje,
-				estado: "warning"
-			}
-
-			break;
-		case "noRepeatJuego":
-			data["sms1"] = {
-				mensaje: "Existe un juego activo, no puede crear otro",
-				estado: "warning"
-			}
-
-			break;
-		case "noActiveJuego":
-			data["sms1"] = {
-				mensaje: "No exite un juego activo para cancelar",
-				estado: "warning"
-			}
-
-			break;
-		default:
-			break;
-	}
-
-
+function showMensajesNotificacion(mensaje = "Mensaje Sin Especificar", estado="warning") {
+	
+	const data = {
+		sms1:{
+			mensaje,
+			estado
+		}
+	};
 	const $alert = document.getElementById("alert");
 	showAlert($alert, data);
 }
@@ -347,28 +351,31 @@ function clickBtnLetras(event) {
 		let letraPresionada = typeElement.textContent;
 		// Verificar si es button  y ademas que si ya fue presionada o no anteriormente
 		if (typeElement.matches("button") && !miPartida.getLetrasPulsadas.includes(letraPresionada)) {
-			
+
 			// Cambiar el tipo de cursor para el elemento presionado
-			typeElement.classList.add("btn-cursor-no-pointer");		
+			typeElement.classList.add("btn-cursor-no-pointer");
 			let isContentLetra = miPartida.verificarLetraContenida(letraPresionada);
 			setPalabraImgJuego(true);
-		
-			console.log("Is fin juego ", miPartida.isFinJuego);
+
+			/*console.log("Is fin juego ", miPartida.isFinJuego);
 			console.log("Letra presioanda ", letraPresionada);
 			console.log("lista de letras ", miPartida.getLetrasPulsadas);
 			console.log("Palabra adivinada ", miPartida.getPalabraAcertada);
-			
-			if (miPartida.isFinJuego){
-				$modalContentResultado.querySelector("#modal-img-resultado").setAttribute("src", miPartida.getPathImg);			
-				$modalContentResultado.querySelector(".modal__mensaje").textContent =miPartida.getSmsFinJuego;
-				$modal.querySelector("#modal-btn-aceptar").dataset["action"] ="modal-btn-aceptar-fin-juego";	
+	
+			*/
+			if (miPartida.isFinJuego) {
+				$modalContentResultado.querySelector("#modal-img-resultado").setAttribute("src", miPartida.getPathImg);
+				$modalContentResultado.querySelector(".modal__mensaje").textContent = miPartida.getSmsFinJuego;
+				$modal.querySelector("#modal-btn-aceptar").dataset["action"] = "modal-btn-aceptar-fin-juego";
+				$modal.querySelector("#modal-btn-cancelar").dataset["action"] = "modal-btn-detalles-fin-juego";
 				selectContentModal("fin-juego");
-			}   	
+			}
 		}
 		return;
 	}
-	
-	console.log("No existe una partida actual");
+
+	showMensajesNotificacion("No existe una partida para jugar, crea una nueva ...");
+	// console.log("No existe una partida actual");
 
 }
 
