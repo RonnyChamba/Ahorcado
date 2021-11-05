@@ -393,15 +393,48 @@ function detallesJuego() {
 	// Cambiar el action de los botones del modal
 	$modal.querySelector("#modal-btn-aceptar").dataset["action"] = "modal-btn-aceptar";
 	$modal.querySelector("#modal-btn-cancelar").dataset["action"] = "modal-btn-cancelar";
-
-
+	
+	let fragment = document.createDocumentFragment();
+	
+	let  opcionPalabra = document.createElement("P");
+	opcionPalabra.innerHTML = `
+	<span class ="detalle-juego__option detalle-juego__option--bold"> Palabra: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getPalabra.name} </span> `;
+	
+	let  opcionDescripcion = document.createElement("P");
+	opcionDescripcion.innerHTML = `
+	<span class ="detalle-juego__option detalle-juego__option--bold"> Descripción: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getPalabra.descripcion} </span> `;
+	
+	
+	let  opcionCategoria = document.createElement("P");
+	opcionCategoria.innerHTML = `
+	<span class ="detalle-juego__option detalle-juego__option--bold"> Categoria: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getCategoria.name} </span> `;
+	
+	
+	let  opcionletrasPulsadas = document.createElement("P");
+	opcionletrasPulsadas.innerHTML = `
+	<span class ="detalle-juego__option detalle-juego__option--bold"> Letras Pulsadas: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getLetrasPulsadas} </span> `;
+	
+	let  opcionLabel = document.createElement("P");
+	opcionLabel.innerHTML = `
+	<span class ="detalle-juego__option detalle-juego__option--bold"> Palabra en Juego: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.mostrarTextoPalabra()} </span> `;
+	
+	fragment.appendChild(opcionPalabra);
+	fragment.appendChild(opcionDescripcion);
+	fragment.appendChild(opcionCategoria);
+	fragment.appendChild(opcionletrasPulsadas);
+	fragment.appendChild(opcionLabel);
+	
+	$modalContentDetalleJuego.querySelector ("#content-detalle-js").appendChild(fragment); 	
+	
 	// Wraper para del nuevo contenido  modal
 	let $modalContent = $modal.querySelector(".modal__item-content");
 	// Limpiar contenido
 	$modalContent.innerHTML = "";
 	// Add contenido nuevo en la seccion contenido del modal
 	$modalContent.insertAdjacentElement("afterbegin", $modalContentDetalleJuego);
-
+	
+	console.log("partida " , miPartida.getPalabra);
+	
 }
 
 console.log("LEIDO JUEGO")

@@ -23,15 +23,12 @@ export function createWraperCategoria() {
 // mostrara los detalle de la partida jugada, palabra, categoria, ect
 export function createWraperDetalleJuego() {
 	let wraperJuego = document.createElement("DIV");
-	wraperJuego.classList.add("modal-content-detalle-juego", "moda-content-detalle-juego--flex");
+	wraperJuego.classList.add("modal-content-detalle-juego");
 	
-	// columnUno contendra la clave : palabra
+	// contenido
 	let columnOptionUno = document.createElement("DIV");
-	// COlumnDos contendra el valor : leon
-	let columnOptionDos = document.createElement("DIV");
-	
+	columnOptionUno.setAttribute("id", "content-detalle-js");
 	wraperJuego.appendChild(columnOptionUno);
-	wraperJuego.appendChild(columnOptionDos);
 	return wraperJuego;
 }
 
