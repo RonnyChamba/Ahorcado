@@ -22,21 +22,21 @@
 					<div class="row">
 						<span>Categoria:</span>
 						<div class="aside-menu__option aside-menu__option--flex">
-							<p class ="help-juego help-categoria">sasasdsdf</p>
+							<p class="help-juego help-categoria">sasasdsdf</p>
 							<span class="icon-eye"></span>
 						</div>
 					</div>
 					<div class="row">
 						<span>Desc Categoria:</span>
 						<div class="aside-menu__option aside-menu__option--flex">
-							<p class ="help-juego help-desc-categoria">sasasdsdf</p>
+							<p class="help-juego help-desc-categoria">sasasdsdf</p>
 							<span class="icon-eye"></span>
 						</div>
 					</div>
 					<div class="row">
 						<span>Desc Palabra:</span>
 						<div class="aside-menu__option aside-menu__option--flex">
-							<p class ="help-juego help-desc-palabra">sasasdsdf</p>
+							<p class="help-juego help-desc-palabra">sasasdsdf</p>
 							<span class="icon-eye"></span>
 						</div>
 					</div>
@@ -74,10 +74,12 @@
 				</div>
 				<div class="jugar__item jugar__item--img-palabra">
 					<div class="jugar__img">
-						<img src="img/img-estado/ahor0.png" alt="Ahorcado" id="img-juego-main" />
+						<img src="img/img-estado/ahor0.png" alt="Ahorcado"
+							id="img-juego-main" />
 					</div>
 					<div class="jugar__palabra">
-						<p class ="palabra-buscar" id="palabra-juego-main">COMIENZA A JUGAR</p>
+						<p class="palabra-buscar" id="palabra-juego-main">COMIENZA A
+							JUGAR</p>
 					</div>
 				</div>
 				<div class="jugar__item jugar__item--letras">
@@ -114,7 +116,7 @@
 						<button class="btn btn__juego btn__juego--letra">N</button>
 						<button class="btn btn__juego btn__juego--letra">M</button>
 					</div>
-					 <div class="jugar__item--letras-load"></div>
+					<div class="jugar__item--letras-load"></div>
 				</div>
 			</section>
 		</div>
@@ -124,16 +126,18 @@
 	<div class="modal" id="modal">
 		<div class="modal__content" id="modal-content">
 			<h2 class="modal__title"></h2>
-			  <div class="modal__item modal__item-content"></div>
+			<div class="modal__item modal__item-content"></div>
 			<div class="modal__item modal__item--botones">
-				<button class="btn btn--send"   id="modal-btn-aceptar" data-action="modal-btn-aceptar">Aceptar</button>
-				<button class="btn btn--danger" id="modal-btn-cancelar" data-action="modal-btn-cancelar">Cancelar</button>
+				<button class="btn btn--send" id="modal-btn-aceptar"
+					data-action="modal-btn-aceptar">Aceptar</button>
+				<button class="btn btn--danger" id="modal-btn-cancelar"
+					data-action="modal-btn-cancelar">Cancelar</button>
 			</div>
 		</div>
-		
+
 		<div class="modal__load">
-        <p class="modal__load-barra">Cargando datos......</p>
-      </div>
+			<p class="modal__load-barra">Cargando datos......</p>
+		</div>
 		<div class="modal__close" id="modal-close">X</div>
 	</div>
 	<script src="js/script_juego.js" type="module"></script>

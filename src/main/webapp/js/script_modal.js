@@ -18,6 +18,24 @@ export function createWraperCategoria() {
 	return wraperSelect;
 }
 
+
+// Contenido del modal, se crea cuando se lee el archivo
+// mostrara los detalle de la partida jugada, palabra, categoria, ect
+export function createWraperDetalleJuego() {
+	let wraperJuego = document.createElement("DIV");
+	wraperJuego.classList.add("modal-content-detalle-juego", "moda-content-detalle-juego--flex");
+	
+	// columnUno contendra la clave : palabra
+	let columnOptionUno = document.createElement("DIV");
+	// COlumnDos contendra el valor : leon
+	let columnOptionDos = document.createElement("DIV");
+	
+	wraperJuego.appendChild(columnOptionUno);
+	wraperJuego.appendChild(columnOptionDos);
+	return wraperJuego;
+}
+
+
 /*Modal para mostrar al ganar o perder la partida */
 export function createWraperResultado() {
   let wraperResultado = document.createElement("DIV");
