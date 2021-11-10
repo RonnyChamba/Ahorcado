@@ -182,7 +182,7 @@ function preIniciarJuego(event) {
 
 		// Finaliza el juego(pierda o gane) y acepta 
 		if (buttonAction === "modal-btn-aceptar-fin-juego") reiniciaPartida();
-		
+
 
 		// Detalles del juego despues de finalizar 
 		if (buttonAction === "modal-btn-detalles-fin-juego") detallesJuego();
@@ -381,6 +381,8 @@ async function guardarJuegoBD(datos) {
 function reiniciaPartida() {
 
 	$modal.querySelector("#modal-btn-aceptar").dataset["action"] = "modal-btn-aceptar";
+	// Se oculto previamente cuando mostre los detalles del juego
+	$modal.querySelector("#modal-btn-cancelar").style.display = "block";
 	$modal.querySelector("#modal-btn-cancelar").dataset["action"] = "modal-btn-cancelar";
 	cancelPartida();
 }
@@ -388,9 +390,9 @@ function reiniciaPartida() {
 function detallesJuego() {
 	console.log("click en detalles");
 	// Cambiar el action de los botones del modal
-	$modal.querySelector("#modal-btn-aceptar").dataset["action"] = "modal-btn-aceptar";
-	$modal.querySelector("#modal-btn-cancelar").dataset["action"] = "modal-btn-cancelar";
-
+	$modal.querySelector("#modal-btn-aceptar").dataset["action"] = "modal-btn-aceptar-fin-juego";
+	// Oculto el boton
+	$modal.querySelector("#modal-btn-cancelar").style.display = "none";
 	let fragment = document.createDocumentFragment();
 
 	let opcionPalabra = document.createElement("P");
@@ -421,6 +423,7 @@ function detallesJuego() {
 	fragment.appendChild(opcionletrasPulsadas);
 	fragment.appendChild(opcionLabel);
 
+	$modalContentDetalleJuego.querySelector("#content-detalle-js").innerHTML = "";
 	$modalContentDetalleJuego.querySelector("#content-detalle-js").appendChild(fragment);
 
 	// Wraper para del nuevo contenido  modal
