@@ -181,7 +181,8 @@ function preIniciarJuego(event) {
 		if (buttonAction === "modal-btn-cancelar" && miPartida !== null) cancelPartida();
 
 		// Finaliza el juego(pierda o gane) y acepta 
-		if (buttonAction === "modal-btn-aceptar-fin-juego") aceptarFinPartida();
+		if (buttonAction === "modal-btn-aceptar-fin-juego") reiniciaPartida();
+		
 
 		// Detalles del juego despues de finalizar 
 		if (buttonAction === "modal-btn-detalles-fin-juego") detallesJuego();
@@ -191,53 +192,6 @@ function preIniciarJuego(event) {
 	}
 
 }
-
-
-// Cuando se gane o pierda, boton aceptar del modal
-function aceptarFinPartida() {
-	// let partidaGuardar = miPartida;
-	$modal.classList.remove("modal--show");
-
-	let idPalabra = miPartida.getPalabra.id;
-	let puntaje = miPartida.getPuntos;
-	let tiempo = 30;
-	let fechaJuego = miPartida.getFechaJuego;
-	const datos = {
-		action: "guardarJuego",
-		idPalabra,
-		puntaje,
-		tiempo,
-		fechaJuego
-	}
-
-	guardarJuegoBD(datos);
-	cancelPartida(); // llamar despues de guardarJuegos BD
-	$modal.querySelector("#modal-btn-aceptar").dataset["action"] = "modal-btn-aceptar";
-	$modal.querySelector("#modal-btn-cancelar").dataset["action"] = "modal-btn-cancelar";
-}
-
-
-
-async function guardarJuegoBD(datos) {
-
-	try {
-		let queryString = createQueryString(datos);
-		let xhrGuadarJuego = await ajax(serlvet, queryString);
-		let responseJuego = xhrGuadarJuego.xhr.responseText;
-		responseJuego = JSON.parse(responseJuego);
-		showMensajesNotificacion(responseJuego.sms, responseJuego.estado ? "succes" : "warning");
-
-
-
-	} catch (error) {
-		// Error de ajax o error de este bloque
-		console.log("Error en guarsar Juego ", error);
-	} finally {
-
-	}
-}
-
-
 
 function getOptionSeleccionada() {
 	let $optionSelect = $modal.querySelector("#modal-categoria");
@@ -366,14 +320,10 @@ function clickBtnLetras(event) {
 			typeElement.classList.add("btn-cursor-no-pointer");
 			let isContentLetra = miPartida.verificarLetraContenida(letraPresionada);
 			setPalabraImgJuego(true);
-
-			/*console.log("Is fin juego ", miPartida.isFinJuego);
-			console.log("Letra presioanda ", letraPresionada);
-			console.log("lista de letras ", miPartida.getLetrasPulsadas);
-			console.log("Palabra adivinada ", miPartida.getPalabraAcertada);
-	
-			*/
 			if (miPartida.isFinJuego) {
+				// Guardar en la base de datos
+				aceptarFinPartida();
+
 				$modalContentResultado.querySelector("#modal-img-resultado").setAttribute("src", miPartida.getPathImg);
 				$modalContentResultado.querySelector(".modal__mensaje").textContent = miPartida.getSmsFinJuego;
 				$modal.querySelector("#modal-btn-aceptar").dataset["action"] = "modal-btn-aceptar-fin-juego";
@@ -388,53 +338,100 @@ function clickBtnLetras(event) {
 	// console.log("No existe una partida actual");
 }
 
+// Cuando se gane o pierda
+function aceptarFinPartida() {
+	let idPalabra = miPartida.getPalabra.id;
+	let puntaje = miPartida.getPuntos;
+	let tiempo = 30;
+	let fechaJuego = miPartida.getFechaJuego;
+	const datos = {
+		action: "guardarJuego",
+		idPalabra,
+		puntaje,
+		tiempo,
+		fechaJuego
+	}
+
+	guardarJuegoBD(datos);
+	// cancelPartida(); // llamar despues de guardarJuegos BD
+	//$modal.querySelector("#modal-btn-aceptar").dataset["action"] = "modal-btn-aceptar";
+	// $modal.querySelector("#modal-btn-cancelar").dataset["action"] = "modal-btn-cancelar";
+}
+
+async function guardarJuegoBD(datos) {
+
+	try {
+		let queryString = createQueryString(datos);
+		let xhrGuadarJuego = await ajax(serlvet, queryString);
+		let responseJuego = xhrGuadarJuego.xhr.responseText;
+		responseJuego = JSON.parse(responseJuego);
+		showMensajesNotificacion(responseJuego.sms, responseJuego.estado ? "succes" : "warning");
+
+
+
+	} catch (error) {
+		// Error de ajax o error de este bloque
+		console.log("Error en guarsar Juego ", error);
+	} finally {
+
+	}
+}
+
+// Despues de pulsar aceptar del modal cuando finaliza la partida
+function reiniciaPartida() {
+
+	$modal.querySelector("#modal-btn-aceptar").dataset["action"] = "modal-btn-aceptar";
+	$modal.querySelector("#modal-btn-cancelar").dataset["action"] = "modal-btn-cancelar";
+	cancelPartida();
+}
+
 function detallesJuego() {
 	console.log("click en detalles");
 	// Cambiar el action de los botones del modal
 	$modal.querySelector("#modal-btn-aceptar").dataset["action"] = "modal-btn-aceptar";
 	$modal.querySelector("#modal-btn-cancelar").dataset["action"] = "modal-btn-cancelar";
-	
+
 	let fragment = document.createDocumentFragment();
-	
-	let  opcionPalabra = document.createElement("P");
+
+	let opcionPalabra = document.createElement("P");
 	opcionPalabra.innerHTML = `
 	<span class ="detalle-juego__option detalle-juego__option--bold"> Palabra: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getPalabra.name} </span> `;
-	
-	let  opcionDescripcion = document.createElement("P");
+
+	let opcionDescripcion = document.createElement("P");
 	opcionDescripcion.innerHTML = `
 	<span class ="detalle-juego__option detalle-juego__option--bold"> Descripción: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getPalabra.descripcion} </span> `;
-	
-	
-	let  opcionCategoria = document.createElement("P");
+
+
+	let opcionCategoria = document.createElement("P");
 	opcionCategoria.innerHTML = `
 	<span class ="detalle-juego__option detalle-juego__option--bold"> Categoria: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getCategoria.name} </span> `;
-	
-	
-	let  opcionletrasPulsadas = document.createElement("P");
+
+
+	let opcionletrasPulsadas = document.createElement("P");
 	opcionletrasPulsadas.innerHTML = `
 	<span class ="detalle-juego__option detalle-juego__option--bold"> Letras Pulsadas: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getLetrasPulsadas} </span> `;
-	
-	let  opcionLabel = document.createElement("P");
+
+	let opcionLabel = document.createElement("P");
 	opcionLabel.innerHTML = `
 	<span class ="detalle-juego__option detalle-juego__option--bold"> Palabra en Juego: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.mostrarTextoPalabra()} </span> `;
-	
+
 	fragment.appendChild(opcionPalabra);
 	fragment.appendChild(opcionDescripcion);
 	fragment.appendChild(opcionCategoria);
 	fragment.appendChild(opcionletrasPulsadas);
 	fragment.appendChild(opcionLabel);
-	
-	$modalContentDetalleJuego.querySelector ("#content-detalle-js").appendChild(fragment); 	
-	
+
+	$modalContentDetalleJuego.querySelector("#content-detalle-js").appendChild(fragment);
+
 	// Wraper para del nuevo contenido  modal
 	let $modalContent = $modal.querySelector(".modal__item-content");
 	// Limpiar contenido
 	$modalContent.innerHTML = "";
 	// Add contenido nuevo en la seccion contenido del modal
 	$modalContent.insertAdjacentElement("afterbegin", $modalContentDetalleJuego);
-	
-	console.log("partida " , miPartida.getPalabra);
-	
+
+	console.log("partida ", miPartida.getPalabra);
+
 }
 
 console.log("LEIDO JUEGO")
