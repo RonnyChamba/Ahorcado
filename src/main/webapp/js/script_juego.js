@@ -217,6 +217,8 @@ async function getDatosPalabra(idCategoria) {
 		if (responsePalabra.estado) {
 			// Pintar los datos para jugar
 			setDatosPartida(responsePalabra.palabra);
+			// quitar el load de las letras, add una clase para ocultarlo
+			 document.querySelector(".jugar__item--letras-load").classList.add("jugar__item--letras-load--hide");
 			return;
 		}
 
@@ -277,9 +279,20 @@ function setOptionsAyuda(tipoAccion = true) {
 function cancelPartida() {
 	setOptionsAyuda(false);
 	setPalabraImgJuego(false);
+	// Remover clases de los elementos para que vuelva a sus estado original
 	miPartida = null;
+	
+	// ubicar nuevamente load de las letras, eliminar clase para que aparesca
+	document.querySelector(".jugar__item--letras-load").classList.remove("jugar__item--letras-load--hide");
+	// Volver el estado del curso de los botones de las letras(xq cuando son pulsados cambiar de tipo cursor)
+	
+	 [...$botonesLetra.querySelectorAll("button.btn-cursor-no-pointer")].forEach( (element) =>{
+		element.classList.remove("btn-cursor-no-pointer");
+		
+	});
+	
 	$modal.classList.remove("modal--show");
-
+	
 }
 
 function setPalabraImgJuego(tipoAccion = true) {
