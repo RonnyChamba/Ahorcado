@@ -11,6 +11,7 @@ export function createWraperCategoria() {
 	selectCat.classList.add("modal__categoria");
 
 	let labelCategoria = document.createElement("SPAN");
+	labelCategoria.classList.add("modal__mensaje")
 	labelCategoria.textContent = "Tipo categoria:";
 
 	wraperSelect.appendChild(labelCategoria);
@@ -27,6 +28,7 @@ export function createWraperDetalleJuego() {
 	
 	// contenido
 	let columnOptionUno = document.createElement("DIV");
+	columnOptionUno.classList.add("detalle-juego-contenido");
 	columnOptionUno.setAttribute("id", "content-detalle-js");
 	wraperJuego.appendChild(columnOptionUno);
 	return wraperJuego;
@@ -52,6 +54,7 @@ export function createWraperResultado() {
 // Se lo llama varias veces
 export function createWraperMensaje(mensaje = "Mensaje del sistema") {
 	let wraper = document.createElement("DIV");
+	wraper.classList.add("modal-content-pregunta");
 	let mensajeModal = document.createElement("P");
 	mensajeModal.textContent = mensaje;
 	mensajeModal.classList.add("modal__mensaje");

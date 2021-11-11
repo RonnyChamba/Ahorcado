@@ -397,25 +397,25 @@ function detallesJuego() {
 
 	let opcionPalabra = document.createElement("P");
 	opcionPalabra.innerHTML = `
-	<span class ="detalle-juego__option detalle-juego__option--bold"> Palabra: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getPalabra.name} </span> `;
+	<span class ="detalle-juego__option detalle-juego__option--key"> Palabra: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getPalabra.name} </span> `;
 
 	let opcionDescripcion = document.createElement("P");
 	opcionDescripcion.innerHTML = `
-	<span class ="detalle-juego__option detalle-juego__option--bold"> Descripción: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getPalabra.descripcion} </span> `;
+	<span class ="detalle-juego__option detalle-juego__option--key"> Descripción: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getPalabra.descripcion} </span> `;
 
 
 	let opcionCategoria = document.createElement("P");
 	opcionCategoria.innerHTML = `
-	<span class ="detalle-juego__option detalle-juego__option--bold"> Categoria: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getCategoria.name} </span> `;
+	<span class ="detalle-juego__option detalle-juego__option--key"> Categoria: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getCategoria.name} </span> `;
 
 
 	let opcionletrasPulsadas = document.createElement("P");
 	opcionletrasPulsadas.innerHTML = `
-	<span class ="detalle-juego__option detalle-juego__option--bold"> Letras Pulsadas: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getLetrasPulsadas} </span> `;
+	<span class ="detalle-juego__option detalle-juego__option--key"> Letras Pulsadas: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.getLetrasPulsadas} </span> `;
 
 	let opcionLabel = document.createElement("P");
 	opcionLabel.innerHTML = `
-	<span class ="detalle-juego__option detalle-juego__option--bold"> Palabra en Juego: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.mostrarTextoPalabra()} </span> `;
+	<span class ="detalle-juego__option detalle-juego__option--key"> Palabra en Juego: </span> : <span class ="detalle-juego__option detalle-juego__option--value"> ${miPartida.mostrarTextoPalabra()} </span> `;
 
 	fragment.appendChild(opcionPalabra);
 	fragment.appendChild(opcionDescripcion);
