@@ -127,7 +127,7 @@
 		<div class="modal__content" id="modal-content">
 			<h2 class="modal__title"></h2>
 			<div class="modal__item modal__item-content"></div>
-			<div class="modal__item modal__item--botones">
+			<div class="modal__item modal__item-botones">
 				<button class="btn btn--send" id="modal-btn-aceptar"
 					data-action="modal-btn-aceptar">Aceptar</button>
 				<button class="btn btn--danger" id="modal-btn-cancelar"
