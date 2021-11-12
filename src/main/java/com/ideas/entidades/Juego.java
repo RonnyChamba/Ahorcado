@@ -9,10 +9,12 @@ public class Juego {
 	private String fecha;
 	private int tiempo;
 	private double puntaje;
-	private List<Palabra> palabras;
+	private Palabra palabra;
 	private Jugador jugador;
 	
-	public Juego() {}
+	public Juego() {
+		palabra = new Palabra();
+	}
 	
 	public Juego(String idJuego, String fecha, int tiempo, double puntaje ) {
 		super();
@@ -54,12 +56,12 @@ public class Juego {
 		this.puntaje = puntaje;
 	}
 
-	public List<Palabra> getPalabras() {
-		return palabras;
+	public Palabra getPalabra() {
+		return palabra;
 	}
 
-	public void setPalabras(List<Palabra> palabras) {
-		this.palabras = palabras;
+	public void setPalabra(Palabra palabra) {
+		this.palabra = palabra;
 	}
 
 	public Jugador getJugador() {
@@ -73,7 +75,7 @@ public class Juego {
 	@Override
 	public String toString() {
 		return "Juego [idJuego=" + idJuego + ", fecha=" + fecha + ", tiempo=" + tiempo + ", puntaje=" + puntaje
-				+ ", palabras=" + palabras + ", jugador=" + jugador + "]";
+				+ ", palabras=" + palabra + ", jugador=" + jugador + "]";
 	}
 	
 	

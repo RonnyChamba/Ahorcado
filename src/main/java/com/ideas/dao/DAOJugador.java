@@ -2,8 +2,11 @@ package com.ideas.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
+
 import com.ideas.commons.ExceptionData;
 import com.ideas.conf.Coneccion;
+import com.ideas.entidades.Juego;
 import com.ideas.entidades.Jugador;
 
 public class DAOJugador {
@@ -61,6 +64,10 @@ public class DAOJugador {
 				jugador.setCiudad(rs.getString("CIU_JUG"));
 				jugador.setClave(rs.getString("CLA_JUG"));
 				jugador.setPuntaje(rs.getDouble("PUN_JUG"));
+				
+				DAOJuego daoJuego = new DAOJuego();
+				List<Juego> juegos = daoJuego.listar(jugador, "3");
+				jugador.setJuegos(juegos);
 				
 			}
 			
