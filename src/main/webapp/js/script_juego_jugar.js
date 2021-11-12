@@ -31,13 +31,18 @@ export function initComponents(datosJuego){
 	$labelTimer = datosJuego.labelTimer;
 	createQueryString = datosJuego.createQueryString;
 	ajax = datosJuego.ajax;
-	serlvet = datosJuego.servlet;
+	serlvet = datosJuego.serlvet;
 	showAlert = datosJuego.showAlert;
 	createWraperMensaje = datosJuego.createWraperMensaje;
 	changeTextBtnTitle = datosJuego.changeTextBtnTitle;	
+	
+	listenerOk();
+}
 
-	console.log($modal);
-	console.log($modalContentSelect);
+function listenerOk(){
+	parentBotonesPartida();
+	parentBotonesLetras();
+	parentModal();
 	
 }
 
