@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -42,7 +44,37 @@
 					</div>
 				</div>
 				<div class="aside-menu__item">
-					<h2>Mis Juegos</h2>
+					<h2>Ultimo 3 Juegos</h2>
+					<table  class ="table">
+						<thead class ="table__head" >
+							<tr>
+								<th class="table__celda table__celda--media table__celda--th">Fecha</th>
+								<th class="table__celda table__celda--media table__celda--th">Palabra</th>
+								<th class="table__celda table__celda--small table__celda--th">Puntaje</th>
+							</tr>
+						</thead>
+
+						<tbody class="table__body">
+							<c:forEach var="juego" items="${usuario.juegos}">
+								<tr>
+									<td  class="table__celda table__celda--td"> <c:out value="${juego.fecha}" /></td>
+									<td  class="table__celda table__celda--td"> <c:out value="${juego.palabra.nombre}" /></td>
+									<td  class="table__celda table__celda--td"> <c:out value="${juego.puntaje}" /></td>
+								</tr>
+							</c:forEach>
+
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="3">Total de juegos: <c:out value="${fn:length(usuario.juegos)}" default="0"/>   </td>
+							</tr>
+						</tfoot>
+
+					</table>
+					<div>
+					   
+					   <p> <a href="#"> Ver todos mis Juegos</a> </p>
+					</div>
 				</div>
 			</aside>
 			<section class="jugar">

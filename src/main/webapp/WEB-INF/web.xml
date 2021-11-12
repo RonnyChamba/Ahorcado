@@ -3,7 +3,7 @@
 	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
-	<display-name>ahorcado</display-name>
+	<display-name>ahorcado</display-name> 
 
 	<servlet>
 		<servlet-name>ServletCategoria</servlet-name>
@@ -78,6 +78,7 @@
 		<url-pattern>/nueva-categoria.jsp</url-pattern>
 		<url-pattern>/nueva-palabra.jsp</url-pattern>
 		<url-pattern>/nuevo-jugador.jsp</url-pattern>
+			<url-pattern>/jugar.jsp</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 
 	</filter-mapping>

@@ -145,18 +145,16 @@ public class ControlJuego extends HttpServlet {
 			Jugador jugador = new Jugador();
 			jugador.setIdJugador(idJugador);
 
-			Palabra palabra = new Palabra();
-			palabra.setIdPalabra(idPalabra);
+			//Palabra palabra = new Palabra();
+			//palabra.setIdPalabra(idPalabra);
 
 			juego.setJugador(jugador);
 			juego.setFecha(fecha);
 			juego.setPuntaje(Double.parseDouble(puntaje));
 			juego.setTiempo(Integer.parseInt(tiempo));
-
-			List<Palabra> listPalabra = new ArrayList<Palabra>(1);
-			listPalabra.add(palabra);
-			juego.setPalabras(listPalabra);
-
+			juego.getPalabra().setIdPalabra(idPalabra);
+		
+			
 			boolean estado = daoJuego.insert(juego);
 			json.put("estado", true);
 			json.put("sms", estado?"Juego guardado con exito":"No se guardo ningun registro de juego");
