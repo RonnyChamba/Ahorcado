@@ -14,11 +14,11 @@ const $verAyuda = document.querySelector(".aside-menu__item");
 const $modalContentSelect = createWraperCategoria();
 const $modalContentResultado = createWraperResultado();
 const $modalContentDetalleJuego = createWraperDetalleJuego();
-// const $modal = document.getElementById("modal");
+const labelTimer = document.getElementById("time-js");
 const serlvet = "CJuego";
+
 let miPartida = null
 let timerPartida = null;
-const labelTimer = document.getElementById("time-js");
 
 $botonesJugar.addEventListener("click", (event) => {
 	if (event.target.matches("button")) buttonJuego(event);
