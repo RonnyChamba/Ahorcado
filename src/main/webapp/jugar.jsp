@@ -66,10 +66,14 @@
                 "
 							id="btn-pause">Detener</button>
 					</div>
-					<div class="jugar__time">
-						<span class="icon-time"></span>
-						<!-- <p>103 s</p> -->
-						<span>sasa</span>
+					<div class="jugar__opcion">
+						<div class="jugar__time">
+							<span class="icon-time"></span> <span id="time-js">00</span>
+						</div>
+						<button
+							class="icon-help btn btn__juego btn__juego--opcion btn__juego--info"
+							id="btn-info">Info</button>
+
 					</div>
 				</div>
 				<div class="jugar__item jugar__item--img-palabra">

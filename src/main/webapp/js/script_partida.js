@@ -6,7 +6,7 @@ export class Partida {
 		this.listaCaracteresPalabra = [...this.objPalabra.name].map(() => "");
 		this.numeroIntentos = 0;
 		this.puntosPartida = 100;
-
+		this.segundosJuego = 0;
 		// Almacena todas las letras pulsadas/ correcta e incorrectas
 		this.letrasPulsadas = [];
 	}
@@ -55,18 +55,32 @@ export class Partida {
 	}
 
 	get isFinJuego() {
-		return this.getPalabraAcertada || this.getNumeroIntentos == 5;
+		return this.getPalabraAcertada || this.getNumeroIntentos == 5 || this.getSegundosJuego == 60;
 	}
 
 	get getSmsFinJuego() {
-		return this.getPalabraAcertada ? "Has acertado la palabra" : "Se terminaron los intentos permitidos";
+
+		let mensaje = "";
+
+		if (this.getPalabraAcertada) mensaje = "Has acertado la palabra";
+		else if (this.getNumeroIntentos === 5) mensaje = "Se terminaron los intentos permitidos";
+		else if (this.getSegundosJuego === 60) mensaje = "Se termino el tiempo disponible";
+		else mensaje = "Fin del juego";
+
+		return mensaje;
 	}
 	get getFechaJuego() {
 		let fecha = new Date();
-		return  `${fecha.getFullYear()}-${fecha.getMonth() + 1}-${fecha.getDate()}`;
+		return `${fecha.getFullYear()}-${fecha.getMonth() + 1}-${fecha.getDate()}`;
 	}
 	get getLetrasPulsadas() {
 		return this.letrasPulsadas;
+	}
+	get getSegundosJuego() {
+		return this.segundosJuego;
+	}
+	set setSegundosJuego(segundos) {
+		this.segundosJuego = segundos;
 	}
 
 }
