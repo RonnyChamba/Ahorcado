@@ -1,3 +1,2 @@
 # Ignorar la carpeta build con los .class
-/build/**/*.class
-/build/
+build/
