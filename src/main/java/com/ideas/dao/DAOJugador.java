@@ -65,10 +65,10 @@ public class DAOJugador {
 				jugador.setClave(rs.getString("CLA_JUG"));
 				jugador.setPuntaje(rs.getDouble("PUN_JUG"));
 				
-				DAOJuego daoJuego = new DAOJuego();
+				/*DAOJuego daoJuego = new DAOJuego();
 				List<Juego> juegos = daoJuego.listar(jugador, "3");
 				jugador.setJuegos(juegos);
-				
+				*/
 			}
 			
 

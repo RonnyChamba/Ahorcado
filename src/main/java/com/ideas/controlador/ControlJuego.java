@@ -15,6 +15,7 @@ import org.json.simple.JSONObject;
 import com.ideas.commons.ExceptionData;
 import com.ideas.dao.DAOCategoria;
 import com.ideas.dao.DAOJuego;
+import com.ideas.dao.DAOJugador;
 import com.ideas.entidades.Categoria;
 import com.ideas.entidades.Juego;
 import com.ideas.entidades.Jugador;
@@ -137,30 +138,23 @@ public class ControlJuego extends HttpServlet {
 
 			HttpSession miSession = request.getSession(true);
 			if (miSession.getAttribute("usuario") != null) {
-				idJugador = ((Jugador)miSession.getAttribute("usuario")).getIdJugador();
+				Jugador jugador = ((Jugador) miSession.getAttribute("usuario"));
+				Juego juego = new Juego();
+				juego.setJugador(jugador);
+				juego.setFecha(fecha);
+				juego.setPuntaje(Double.parseDouble(puntaje));
+				juego.setTiempo(Integer.parseInt(tiempo));
+				juego.getPalabra().setIdPalabra(idPalabra);
+
+				boolean estado = daoJuego.insert(juego);
+				json.put("estado", true);
+				json.put("sms", estado ? "Juego guardado con exito" : "No se guardo ningun registro de juego");
+
+				// Actaulizar el atributo juegos del jugador
+				if (estado)actualizarJuegosJugador(jugador, miSession, "3");
+				
+				System.out.println("Juego a insertar " + juego);
 			}
-
-			Juego juego = new Juego();
-
-			Jugador jugador = new Jugador();
-			jugador.setIdJugador(idJugador);
-
-			//Palabra palabra = new Palabra();
-			//palabra.setIdPalabra(idPalabra);
-
-			juego.setJugador(jugador);
-			juego.setFecha(fecha);
-			juego.setPuntaje(Double.parseDouble(puntaje));
-			juego.setTiempo(Integer.parseInt(tiempo));
-			juego.getPalabra().setIdPalabra(idPalabra);
-		
-			
-			boolean estado = daoJuego.insert(juego);
-			json.put("estado", true);
-			json.put("sms", estado?"Juego guardado con exito":"No se guardo ningun registro de juego");
-			
-			
-			System.out.println("Juego a insertar "+ juego);
 		} catch (ExceptionData e) {
 
 			json.put("estado", false);
@@ -173,5 +167,15 @@ public class ControlJuego extends HttpServlet {
 
 		}
 		response.getWriter().print(json.toJSONString());
+	}
+
+	public void actualizarJuegosJugador(Jugador jugador, HttpSession miSession, String limite) throws ExceptionData {
+		List<Juego> juegos = new ArrayList<Juego>();
+		juegos = daoJuego.listar(jugador, limite);
+		jugador.setJuegos(juegos);		
+		int numeroJuegos = daoJuego.numeroJuegos(jugador);
+		miSession.setAttribute("usuario", jugador);
+		miSession.setAttribute("numeroJuegos", numeroJuegos);
+
 	}
 }

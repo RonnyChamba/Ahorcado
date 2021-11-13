@@ -95,7 +95,7 @@ public class DAOJuego {
 					+ "INNER JOIN JUEGOS  ON IDE_JUG  = FK_IDJUGADOR "
 					+ "INNER JOIN PALABRAS ON IDE_PAL = FK_IDPALABRA "
 					+ "INNER JOIN CATEGORIAS ON IDE_CAT = FK_CODIGOCATEGORIA "
-					+ "WHERE  DNI_JUG=?  " + limite);
+					+ "WHERE  DNI_JUG=?  ORDER BY IDE_JUE DESC " + limite);
 			pr.setString(1, entidad.getCedula());
 			rs = pr.executeQuery();
 
@@ -127,7 +127,28 @@ public class DAOJuego {
 	}
 
 	
-	
+	public int numeroJuegos(Jugador entidad) throws ExceptionData {
+		PreparedStatement pr = null;
+		ResultSet rs = null;
+		try {
+
+			pr = coneccion.getConection().prepareStatement("SELECT COUNT(IDE_JUE) AS NUMEROS_JUEGOS "
+					+ "FROM JUGADORES "
+					+ "INNER JOIN JUEGOS  ON IDE_JUG  = FK_IDJUGADOR "
+					+ "WHERE  DNI_JUG=?");
+			pr.setString(1,entidad.getCedula());
+			rs = pr.executeQuery();
+
+			if (rs.next()) return rs.getInt("NUMEROS_JUEGOS");
+			else return -1;
+			
+
+		} catch (Exception e) {
+			System.out.println("Error al acceder al sistema");
+			 throw new ExceptionData("Error al acceder al sistema, intentalo mas tarde");
+		}
+
+	}
 	
 		
 }

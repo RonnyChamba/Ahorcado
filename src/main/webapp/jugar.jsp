@@ -66,7 +66,7 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="3">Total de juegos: <c:out value="${fn:length(usuario.juegos)}" default="0"/>   </td>
+								<td colspan="3">Total de juegos: <c:out value="${numeroJuegos}" default="0"/>   </td>
 							</tr>
 						</tfoot>
 

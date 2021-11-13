@@ -86,7 +86,10 @@ public class ControlJugador extends HttpServlet {
 			if (jugadorLogin != null) {
 
 				HttpSession miSesion = request.getSession(true);
-				miSesion.setAttribute("usuario", jugadorLogin);
+				
+				ControlJuego ct = new ControlJuego();
+				ct.actualizarJuegosJugador(jugadorLogin, miSesion, "3");
+				// miSesion.setAttribute("usuario", jugadorLogin);
 				request.getRequestDispatcher("menu-principal.jsp").forward(request, response);
 
 			} else {
