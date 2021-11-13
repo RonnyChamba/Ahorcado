@@ -23,7 +23,9 @@
 					<li class="lista-menu__item">Bienvenido <c:out
 							value="${usuario.nombre}" />
 					</li>
-					<li class="lista-menu__item">Cerrar Sesi&oacute;n</li>
+					<li class="lista-menu__item">
+					<a href ="CJugador?action=cerrarSesion">Cerrar Sesi&oacute;n</a>		
+					</li>
 				</ul>
 			</header>
 			<div class="row grid">

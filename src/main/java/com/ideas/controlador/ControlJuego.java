@@ -188,7 +188,7 @@ public class ControlJuego extends HttpServlet {
 		miSession.setAttribute("usuario", jugador);
 		miSession.setAttribute("numeroJuegos", numeroJuegos);
 		
-		System.out.println("Llamada a este metodo");
+		// System.out.println("Llamada a este metodo");
 
 	}
 	

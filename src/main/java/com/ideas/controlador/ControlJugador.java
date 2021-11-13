@@ -72,7 +72,10 @@ public class ControlJugador extends HttpServlet {
 		case "formmisjuegos":
 			formListJuegos(request, response);
 			break;
-
+			
+		case "cerrarsesion":
+			cerrarSesion(request, response);
+			break;
 		default:
 			break;
 		}
@@ -175,7 +178,22 @@ public class ControlJugador extends HttpServlet {
 		mostrarForm(request, response, "mis-juegos.jsp");
 	
 	}
+	
+	
+	private void cerrarSesion(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
+	
+		 HttpSession sesion = request.getSession();
+		 sesion.removeAttribute("usuario");
+		 sesion.removeAttribute("numeroJuegos");
+		 sesion.invalidate();
+		 
+		  response.sendRedirect("index.jsp");
+	}
+	
+	
+	
 	private void mostrarForm(HttpServletRequest request, HttpServletResponse response, String path)
 			throws ServletException, IOException {
 
