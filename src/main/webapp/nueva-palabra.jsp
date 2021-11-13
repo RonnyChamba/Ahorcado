@@ -14,7 +14,12 @@
 <body>
 	<div class="container container--palabra">
 		<div class="content">
-			<h1 class="title">Admin Palabra</h1>
+
+			<div class="row row--flex row--flex-space-between">
+				<span> <a href="menu-principal.jsp">Regresar</a>
+				</span>
+				<h1 class="title title--grow-1">Admin Palabra</h1>
+			</div>
 			<form action="CPalabra" class="form" autocomplete="off"
 				name="form-palabra" method="post">
 				<h2 class="form__title">Nueva Palabra</h2>
@@ -54,7 +59,7 @@
 							class="btn btn--reset form__btn" name="reset" /> <input
 							type="submit" data-action="insertPalabra" data-id=""
 							name="guardar" value="Guardar" class="btn btn--send form__btn" />
-					</div>					
+					</div>
 					<div class="mensaje">
 						<c:if test="${mensaje !=null}">
 							<p>
@@ -62,7 +67,7 @@
 							</p>
 						</c:if>
 
-					</div>					
+					</div>
 				</div>
 			</form>
 		</div>
@@ -98,16 +103,15 @@
 													value="${item.nombre}" /></td>
 											<td class="table__celda table__celda--td"><c:out
 													value="${item.descripcion}" /></td>
-											
+
 											<td class="table__celda table__celda--td"><c:out
 													value="${item.categoria.nombre}" /></td>
 
 											<td class="table__celda table__celda--btn table__celda--td">
 												<input type="submit" name="action"
-												data-id="${item.idPalabra}"
-												data-action="formUpdatePalabra" value="Update"
-												class="btn btn--info table__btn" /> <input type="submit"
-												name="action" value="Delete"
+												data-id="${item.idPalabra}" data-action="formUpdatePalabra"
+												value="Update" class="btn btn--info table__btn" /> <input
+												type="submit" name="action" value="Delete"
 												class="btn btn--danger table__btn"
 												data-id="${item.idPalabra}"
 												data-action="actionDeletePalabra" />
@@ -136,7 +140,7 @@
 			</c:otherwise>
 
 		</c:choose>
-		 <div class="alert" id="alert"></div>
+		<div class="alert" id="alert"></div>
 	</div>
 	<script src="js/script_palabra.js" type="module"></script>
 </body>

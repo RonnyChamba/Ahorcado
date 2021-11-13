@@ -53,7 +53,8 @@ public class ControlJuego extends HttpServlet {
 		String action = request.getParameter("action").toLowerCase();
 		switch (action) {
 		case "jugar":
-			mostrarForm(request, response, "jugar.jsp");
+		
+			jugar(request, response);
 			break;
 		case "listarcategorias":
 			listarCategorias(request, response);
@@ -70,14 +71,24 @@ public class ControlJuego extends HttpServlet {
 		}
 
 	}
-
-	private void mostrarForm(HttpServletRequest request, HttpServletResponse response, String path)
+		
+	private void jugar(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		request.getRequestDispatcher(path).forward(request, response);
-
+		try {	
+			HttpSession miSesion = request.getSession(true);
+			Jugador jugador = ((Jugador) miSesion.getAttribute("usuario"));
+			actualizarJuegosJugador(jugador, miSesion, "3");		
+		} catch (ExceptionData e) {
+			
+			request.setAttribute("mensaje",e.getMessage());
+		}
+		
+		mostrarForm(request, response, "jugar.jsp");
 	}
-
+	
+	
+	
 	private void listarCategorias(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -176,6 +187,13 @@ public class ControlJuego extends HttpServlet {
 		int numeroJuegos = daoJuego.numeroJuegos(jugador);
 		miSession.setAttribute("usuario", jugador);
 		miSession.setAttribute("numeroJuegos", numeroJuegos);
+
+	}
+	
+	private void mostrarForm(HttpServletRequest request, HttpServletResponse response, String path)
+			throws ServletException, IOException {
+
+		request.getRequestDispatcher(path).forward(request, response);
 
 	}
 }

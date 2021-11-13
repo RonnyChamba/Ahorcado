@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,14 +14,18 @@
 <body>
 	<div class="container">
 		<div class="content content--juegos">
-			<h1 class="title">Mis Juegos</h1>
-			<div class="row">
-				<a href="" class="link link--return">Regresar</a>
+
+			<div class="row row--flex row--flex-space-between">
+				<span> <a href="menu-principal.jsp">Regresar</a>
+				</span>
+				<h1 class="title title--grow-1">Mis Juegos</h1>
 			</div>
+			
 		</div>
 		<div class="content content--table">
 			<form action="CMain" class="form form--table"
 				name="form-table-juegos" method="post">
+
 				<h2 class="form__title">Juegos Registrados</h2>
 				<div class="row row--content">
 					<table class="table table--juegos">
@@ -41,23 +45,41 @@
 							</tr>
 						</thead>
 						<tbody class="table__body">
-							<tr>
-								<td class="table__celda table__celda--td">00</td>
-								<td class="table__celda table__celda--td">2021-04-12</td>
-								<td class="table__celda table__celda--td">10s</td>
-								<td class="table__celda table__celda--td">300</td>
-								<td class="table__celda table__celda--td">LEON</td>
-								<td class="table__celda table__celda--btn table__celda--td">
-									<input type="submit" data-id="1" data-action="delete"
-									value="Delete" name="delete" class="btn btn--danger table__btn" />
-								</td>
-							</tr>
+
+							<c:forEach var="element" items="${usuario.juegos}">
+
+								<tr>
+									<td class="table__celda table__celda--td"><c:out
+											value="${element.idJuego}" /></td>
+									<td class="table__celda table__celda--td"><c:out
+											value="${element.fecha}" /></td>
+									<td class="table__celda table__celda--td"><c:out
+											value="${element.tiempo}" /> sg</td>
+									<td class="table__celda table__celda--td"><c:out
+											value="${element.puntaje}" /></td>
+									<td class="table__celda table__celda--td"><c:out
+											value="${element.palabra.nombre}" /></td>
+									<td class="table__celda table__celda--btn table__celda--td">
+										<input type="submit" data-id="${element.idJuego}"
+										data-action="delete" value="Delete" name="delete"
+										class="btn btn--danger table__btn" />
+									</td>
+								</tr>
+							</c:forEach>
 						</tbody>
 					</table>
 				</div>
 			</form>
 			<div class="row datos">
-				<p>Numero de juegos:20</p>
+				<p>
+					Total juegos:
+					<c:out value="${numeroJuegos}" default="0" />
+				</p>
+				<c:if test="${mensaje !=null}">
+					<p>
+						<c:out value="${mensaje}"></c:out>
+					</p>
+				</c:if>
 			</div>
 		</div>
 	</div>

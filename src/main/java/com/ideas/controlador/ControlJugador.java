@@ -21,11 +21,13 @@ import com.ideas.entidades.Jugador;
 public class ControlJugador extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private DAOJugador daoJugador;
+	private ControlJuego controlJuegos;
 
 	public ControlJugador() {
 		super();
 
 		daoJugador = new DAOJugador();
+		controlJuegos = new ControlJuego();
 	}
 
 	@Override
@@ -67,6 +69,9 @@ public class ControlJugador extends HttpServlet {
 		case "nuevojugador":
 			insertJugador(request, response);
 			break;
+		case "formmisjuegos":
+			formListJuegos(request, response);
+			break;
 
 		default:
 			break;
@@ -86,10 +91,7 @@ public class ControlJugador extends HttpServlet {
 			if (jugadorLogin != null) {
 
 				HttpSession miSesion = request.getSession(true);
-				
-				ControlJuego ct = new ControlJuego();
-				ct.actualizarJuegosJugador(jugadorLogin, miSesion, "3");
-				// miSesion.setAttribute("usuario", jugadorLogin);
+				controlJuegos.actualizarJuegosJugador(jugadorLogin, miSesion, "3");
 				request.getRequestDispatcher("menu-principal.jsp").forward(request, response);
 
 			} else {
@@ -121,7 +123,7 @@ public class ControlJugador extends HttpServlet {
 				String puntaje = request.getParameter("puntaje");
 
 				Jugador jugador = new Jugador();
-				
+
 				jugador.setTipo(tipo == null ? "JUGADOR" : tipo);
 				jugador.setCedula(dni);
 				jugador.setNombre(nombre);
@@ -153,6 +155,25 @@ public class ControlJugador extends HttpServlet {
 		}
 		response.getWriter().print(json.toJSONString());
 
+	}
+
+	private void formListJuegos(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		try {
+
+			HttpSession miSesion = request.getSession(true);
+
+			if (miSesion.getAttribute("usuario") != null) {
+				Jugador jugador = ((Jugador) miSesion.getAttribute("usuario"));
+				controlJuegos.actualizarJuegosJugador(jugador, miSesion, null);
+			} 
+
+		} catch (ExceptionData e) {
+			request.setAttribute("mensaje", e.getMessage());			
+		}
+		mostrarForm(request, response, "mis-juegos.jsp");
+	
 	}
 
 	private void mostrarForm(HttpServletRequest request, HttpServletResponse response, String path)

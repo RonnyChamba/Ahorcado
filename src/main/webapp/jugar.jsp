@@ -73,13 +73,13 @@
 					</table>
 					<div>
 					   
-					   <p> <a href="#"> Ver todos mis Juegos</a> </p>
+					   <p> <a href="CJugador?action=formMisJuegos"> Ver todos mis Juegos</a> </p>
 					</div>
 				</div>
 			</aside>
 			<section class="jugar">
 				<div class="jugar__item jugar__item--flex">
-					<span> <a href="#">Regresar</a>
+					<span> <a href="menu-principal.jsp">Regresar</a>
 					</span>
 					<h1 class="jugar__title title">Jugar</h1>
 				</div>

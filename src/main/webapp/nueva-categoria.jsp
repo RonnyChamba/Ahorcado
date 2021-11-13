@@ -14,7 +14,12 @@
 <body>
 	<div class="container container--categoria" id="container-categoria">
 		<div class="content">
-			<h1 class="title">Admin Categoria</h1>
+
+			<div class="row row--flex row--flex-space-between">
+				<span> <a href="menu-principal.jsp">Regresar</a>
+				</span>
+				<h1 class="title title--grow-1">Admin Categoria</h1>
+			</div>
 			<form action="CMain" class="form form--categoria"
 				name="form-categoria" autocomplete="off" method="post">
 				<h2 class="form__title">Nueva Categoria</h2>
@@ -39,8 +44,10 @@
                 row row--btn row--flex
                 row--content__item row--content__item-30
               ">
-						<input type="reset" value="Limpiar" class="btn btn--reset form__btn" name="reset" /> 
-						<input type="submit" data-action="insertCategoria"  data-id=""  name="guardar" value="Guardar" class="btn btn--send form__btn" />
+						<input type="reset" value="Limpiar"
+							class="btn btn--reset form__btn" name="reset" /> <input
+							type="submit" data-action="insertCategoria" data-id=""
+							name="guardar" value="Guardar" class="btn btn--send form__btn" />
 					</div>
 					<div class="mensaje">
 						<c:if test="${mensaje !=null}">
@@ -87,12 +94,13 @@
 
 											<td class="table__celda table__celda--btn table__celda--td">
 												<input type="submit" name="action"
-												data-id="${item.idCategoria}" data-action="formUpdateCategoria"
-												value="Update" class="btn btn--info table__btn" />
-												 <input type="submit" name="action" 
-												 value="Delete" class="btn btn--danger table__btn"
-												 data-id="${item.idCategoria}" data-action="actionDeleteCategoria" 
-												 />
+												data-id="${item.idCategoria}"
+												data-action="formUpdateCategoria" value="Update"
+												class="btn btn--info table__btn" /> <input type="submit"
+												name="action" value="Delete"
+												class="btn btn--danger table__btn"
+												data-id="${item.idCategoria}"
+												data-action="actionDeleteCategoria" />
 
 											</td>
 										</tr>
@@ -118,7 +126,7 @@
 			</c:otherwise>
 
 		</c:choose>
-		 <div class="alert" id="alert"></div>
+		<div class="alert" id="alert"></div>
 	</div>
 	<script src="js/script_categoria.js" type="module"></script>
 </body>
