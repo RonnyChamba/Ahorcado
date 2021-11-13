@@ -12,6 +12,8 @@
 <link rel="stylesheet" href="css/styel.css" />
 </head>
 <body>
+
+	<c:set value="${usuario.tipo}" var="tipoLogin" />
 	<div class="container">
 		<div class="content content--juegos">
 
@@ -20,7 +22,7 @@
 				</span>
 				<h1 class="title title--grow-1">Mis Juegos</h1>
 			</div>
-			
+
 		</div>
 		<div class="content content--table">
 			<form action="CMain" class="form form--table"
@@ -41,7 +43,11 @@
 									Puntaje</th>
 								<th class="table__celda table__celda--large table__celda--th">
 									Palabra</th>
-								<th class="table__celda table__celda--th">Funciones</th>
+
+								<c:if
+									test="${tipoLogin !=null && tipoLogin.equalsIgnoreCase('ADMIN')}">
+									<th class="table__celda table__celda--th">Funciones</th>
+								</c:if>
 							</tr>
 						</thead>
 						<tbody class="table__body">
@@ -59,11 +65,18 @@
 											value="${element.puntaje}" /></td>
 									<td class="table__celda table__celda--td"><c:out
 											value="${element.palabra.nombre}" /></td>
-									<td class="table__celda table__celda--btn table__celda--td">
-										<input type="submit" data-id="${element.idJuego}"
-										data-action="delete" value="Delete" name="delete"
-										class="btn btn--danger table__btn" />
-									</td>
+
+
+									<c:if
+										test="${tipoLogin !=null && tipoLogin.equalsIgnoreCase('ADMIN')}">
+										<td class="table__celda table__celda--btn table__celda--td">
+											<input type="submit" data-id="${element.idJuego}"
+											data-action="delete" value="Delete" name="delete"
+											class="btn btn--danger table__btn" />
+										</td>
+									</c:if>
+
+
 								</tr>
 							</c:forEach>
 						</tbody>

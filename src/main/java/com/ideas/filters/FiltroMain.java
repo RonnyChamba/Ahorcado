@@ -32,7 +32,7 @@ public class FiltroMain implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		
+
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession sesion = req.getSession();
@@ -48,13 +48,14 @@ public class FiltroMain implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 
 		Jugador jugador = (Jugador) sesion.getAttribute("usuario");
-		
+
 		// Validar tipo de usuario
-		if (!jugador.getTipo().equalsIgnoreCase("ADMIN")) 
+		if (!jugador.getTipo().equalsIgnoreCase("ADMIN"))
 			sesionActiveNormal(request, response, sesion, chain);
-		
+
 		// ADMIN
-		 else  sesionActiveAdmin(request, response, sesion, chain);
+		else
+			sesionActiveAdmin(request, response, sesion, chain);
 
 	}
 
@@ -77,34 +78,43 @@ public class FiltroMain implements Filter {
 			action = "formJugador";
 			servlet = "CJugador";
 		}
+		if ("/mis-juegos.jsp".startsWith(request.getServletPath())) {
+			action = "formMisJuegos";
+			servlet = "CJugador";
+		}
 
-		if (!action.equalsIgnoreCase("") && !servlet.equalsIgnoreCase("") )
+		if (!action.equalsIgnoreCase("") && !servlet.equalsIgnoreCase(""))
 			request.getRequestDispatcher(servlet + "?action=" + action).forward(request, response);
-		else
+		else {
 			// Si los datos de la persona de piensan en actualizar aqui tabmbien tendria
 			// que dirigirme al Servlet para consultarlos de nuevo, para que esten
 			// actualizados
+
+			System.out.println("RUTA " + request.getServletPath());
 			chain.doFilter(request, response);
+		}
 
 	}
 
-	
 	public void sesionActiveNormal(HttpServletRequest request, HttpServletResponse response, HttpSession sesion,
 			FilterChain chain) throws IOException, ServletException {
 
-		// Recursos  denegados, solo valido para los ADMIN
+		// Recursos denegados, solo valido para los ADMIN
 		if ("/nueva-categoria.jsp".startsWith(request.getServletPath())
 				|| "/nueva-palabra.jsp".startsWith(request.getServletPath())
 				|| "/nuevo-jugador.jsp".startsWith(request.getServletPath())) {
 
 			response.sendRedirect("menu-principal.jsp");
-
-		// Acceder a cualquier otro recurso
-		} else chain.doFilter(request, response);
+			return;
+		}
+		
+		// A  acceder a este jsp siempre debe abrir desde el servelt,tanto admin como jugador
+		if ("/mis-juegos.jsp".startsWith(request.getServletPath())) {
+			request.getRequestDispatcher("CJugador" + "?action=" + "formMisJuegos").forward(request, response);
+		}else chain.doFilter(request, response);
 
 	}
 
-	
 	public void destroy() {
 		// TODO Auto-generated method stub
 	}

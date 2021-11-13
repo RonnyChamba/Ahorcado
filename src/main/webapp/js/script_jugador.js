@@ -1,4 +1,4 @@
-import { validarJugador} from "./script.js";
+import { validarJugador, showPass} from "./script.js";
 import { ajax, createQueryString } from "./ajax.js";
 import { showAlert } from "./alerts.js";
 
@@ -50,3 +50,6 @@ async function insertJugador(form) {
 	}
 
 }
+
+$formJugador.elements["showpass"].addEventListener ("change", (event) => showPass($formJugador, event));
+	
